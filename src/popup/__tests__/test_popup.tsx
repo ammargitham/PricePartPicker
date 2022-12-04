@@ -1,8 +1,10 @@
-import * as React from "react";
-import { Popup } from "../component";
-import renderer from "react-test-renderer";
+import * as React from 'react';
 
-it("component renders", () => {
-    const tree = renderer.create(<Popup />).toJSON();
-    expect(tree).toMatchSnapshot();
+import renderer from 'react-test-renderer';
+
+import { Popup } from '../component';
+
+it('component renders', () => {
+  const tree = renderer.create(<Popup />).toJSON();
+  expect(tree).toMatchSnapshot();
 });

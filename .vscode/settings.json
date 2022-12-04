@@ -1,4 +1,23 @@
 {
   "editor.formatOnSave": true,
-  "css.lint.unknownAtRules": "ignore"
+  "css.lint.unknownAtRules": "ignore",
+  "cSpell.words": [
+    "clkrank",
+    "Dexie",
+    "heroicons",
+    "indexeddb",
+    "itemprop",
+    "itemview",
+    "Kakaku",
+    "nocompatible",
+    "partlist",
+    "pcpartpicker",
+    "priceb",
+    "pricet",
+    "revnum",
+    "Ryzen",
+    "tailwindcss",
+    "unsub",
+    "webextension"
+  ]
 }

@@ -1,7 +1,7 @@
 {
-    "name": "react-typescript-chrome-extension-starter",
+    "name": "price-part-picker",
     "version": "2.0.0",
-    "description": "Web Extension starter kit built with React, TypeScript, Tailwind CSS, EsLint, Prettier & Webpack",
+    "description": "Web Extension for showing kakaku.com prices on pcpartpicker.com",
     "main": "index.js",
     "scripts": {
         "build": "webpack --config webpack.prod.js",
@@ -9,12 +9,12 @@
         "test": "jest --config=jest.config.js",
         "lint": "eslint --fix -c ./.eslintrc.js \"src/**/*.ts*\"",
         "prettify": "prettier --write \"src/**/*.ts*\"",
-        "storybook": "start-storybook -p 6006",
+        "storybook": "start-storybook -p 6006 --no-open",
         "build-storybook": "build-storybook"
     },
     "repository": {
         "type": "git",
-        "url": "git+https://github.com/aeksco/react-typescript-chrome-extension-starter.git"
+        "url": "git+https://github.com/ammargitham/PricePartPicker.git"
     },
     "keywords": [
         "react",
@@ -23,23 +23,25 @@
         "extension",
         "boilerplate"
     ],
-    "author": "Alexander Schwartzberg",
+    "author": "Ammar Githam",
     "license": "MIT",
     "bugs": {
-        "url": "https://github.com/aeksco/react-typescript-chrome-extension-starter/issues"
+        "url": "https://github.com/ammargitham/PricePartPicker/issues"
     },
-    "homepage": "https://github.com/aeksco/react-typescript-chrome-extension-starter#readme",
+    "homepage": "https://github.com/ammargitham/PricePartPicker",
     "devDependencies": {
         "@babel/core": "^7.11.6",
         "@babel/preset-env": "^7.11.5",
         "@babel/preset-typescript": "^7.10.4",
-        "@storybook/addon-essentials": "^6.4.9",
-        "@storybook/addon-interactions": "^6.4.9",
-        "@storybook/builder-webpack5": "^6.4.9",
-        "@storybook/manager-webpack5": "^6.4.9",
-        "@storybook/react": "^6.4.9",
-        "@storybook/testing-library": "^0.0.7",
+        "@storybook/addon-essentials": "^6.5.14",
+        "@storybook/addon-interactions": "^6.5.14",
+        "@storybook/builder-webpack5": "^6.5.14",
+        "@storybook/manager-webpack5": "^6.5.14",
+        "@storybook/react": "^6.5.14",
+        "@storybook/testing-library": "^0.0.13",
+        "@trivago/prettier-plugin-sort-imports": "^3.4.0",
         "@types/chrome": "^0.0.124",
+        "@types/deep-equal": "^1.0.1",
         "@types/jest": "^26.0.14",
         "@types/node": "^14.11.8",
         "@types/react": "^17.0.2",
@@ -58,12 +60,16 @@
         "eslint-config-prettier": "^6.12.0",
         "eslint-plugin-prettier": "^3.1.4",
         "eslint-plugin-react": "^7.21.4",
+        "eslint-plugin-react-hooks": "^4.6.0",
+        "eslint-plugin-storybook": "^0.6.7",
         "jest": "^26.5.3",
         "jest-css-modules": "^2.1.0",
         "postcss": "^8.4.5",
         "postcss-loader": "^6.2.1",
         "prettier": "^2.1.2",
         "react-test-renderer": "^17.0.2",
+        "storybook-dark-mode": "^1.1.2",
+        "tailwind-scrollbar": "^2.0.1",
         "tailwindcss": "^3.0.8",
         "ts-jest": "^26.4.1",
         "ts-loader": "^8.0.5",
@@ -73,6 +79,13 @@
         "webpack-merge": "^5.8.0"
     },
     "dependencies": {
+        "@heroicons/react": "^2.0.13",
+        "@reach/dialog": "^0.18.0",
+        "@reach/portal": "^0.18.0",
+        "@reach/tooltip": "^0.18.0",
+        "deep-equal": "^2.1.0",
+        "dexie": "^3.2.2",
+        "nanoid": "^4.0.0",
         "react": "^17.0.2",
         "react-dom": "^17.0.2",
         "webextension-polyfill": "^0.9.0"
