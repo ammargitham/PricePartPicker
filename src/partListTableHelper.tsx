@@ -145,7 +145,7 @@ export function addKakakuColumns(
         onItemChange={(item) => {
           partPrices[part.partPickerId] = item?.price;
           updateTotal(kakakuTotalPriceCell, partPrices);
-          if (nameCell && item) {
+          if (nameCell) {
             updateName(nameCell, item);
           }
         }}
@@ -183,9 +183,16 @@ export function addKakakuColumns(
   partListTable.dataset.kakaku = 'true';
 }
 
-function updateName(nameCell: HTMLTableCellElement, item: KakakuItem) {
-  const kakakuName = createKakakuItemNameElement(item);
+function updateName(nameCell: HTMLTableCellElement, item?: KakakuItem) {
   const existing = nameCell.querySelector('a.price-part-picker.name');
+  if (!item) {
+    if (existing) {
+      // remove the name
+      existing.remove();
+    }
+    return;
+  }
+  const kakakuName = createKakakuItemNameElement(item);
   if (existing) {
     nameCell.replaceChild(kakakuName, existing);
     return;
