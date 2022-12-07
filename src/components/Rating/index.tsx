@@ -47,8 +47,11 @@ export default function Rating({
         >
           <defs>
             <linearGradient id="grad">
-              <stop offset="50%" stopColor="#faca15" />
-              <stop offset="50%" stopColor="#6b7280" />
+              <stop offset="50%" className="stop-color-yellow-300" />
+              <stop
+                offset="50%"
+                className="stop-color-gray-300 dark:stop-color-gray-500"
+              />
             </linearGradient>
           </defs>
           <path fill="url(#grad)" d={starPath}></path>

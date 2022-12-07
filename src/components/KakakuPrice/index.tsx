@@ -4,19 +4,19 @@ import { Dialog } from '@reach/dialog';
 
 import { addPartProxy } from '@src/dbHelper';
 import useKakakuSearch from '@src/hooks/useKakakuSearch';
-import { Part } from '@src/types';
+import { KakakuItem, Part } from '@src/types';
 
 import KakakuPriceContent from './KakakuPriceContent';
 import SearchDialogContent from './SearchDialogContent';
 
 interface KakakuPriceProps {
   part: Part;
-  onPriceChange?: (price?: number) => void;
+  onItemChange?: (kakakuItem?: KakakuItem) => void;
 }
 
 export default function KakakuPrice({
   part,
-  onPriceChange,
+  onItemChange,
 }: KakakuPriceProps): JSX.Element {
   const [showSearchDialog, setShowSearchDialog] = useState(false);
 
@@ -29,8 +29,8 @@ export default function KakakuPrice({
   const closeDialog = () => setShowSearchDialog(false);
 
   useEffect(() => {
-    onPriceChange?.(kakakuItem?.price);
-  }, [kakakuItem?.price, onPriceChange]);
+    onItemChange?.(kakakuItem);
+  }, [kakakuItem, onItemChange]);
 
   return (
     <>

@@ -20,7 +20,7 @@ export default function KakakuItemTooltipContent({
           href={kakakuItem.itemUrl}
         >
           <img
-            className="m-auto min-h-[8rem]"
+            className="m-auto min-h-[8rem] max-h-[12rem]"
             src={kakakuItem.imgUrl}
             alt="product image"
           />

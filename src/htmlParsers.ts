@@ -221,10 +221,10 @@ function parsePageResultInfo(
   };
 }
 
-function parseResultDiv(result: HTMLDivElement): KakakuItem | null {
+function parseResultDiv(result: HTMLDivElement): KakakuItem | undefined {
   if (result.querySelector('p.p-result_item_mall')) {
     // ad
-    return null;
+    return;
   }
   const itemMaker = result.querySelector('p.p-item_maker');
   let maker: string | undefined;
@@ -240,15 +240,18 @@ function parseResultDiv(result: HTMLDivElement): KakakuItem | null {
   }
   const itemNameNode = result.querySelector('p.p-item_name');
   if (!itemNameNode) {
-    throw Error('No name found!');
+    // throw Error('No name found!');
+    return;
   }
   const itemName = itemNameNode?.textContent?.trim();
   if (!itemName) {
-    throw Error('No name found!');
+    // throw Error('No name found!');
+    return;
   }
   const itemPriceSpan = result.querySelector('span.p-item_price_num');
   if (!itemPriceSpan) {
-    throw Error('No price found!');
+    // throw Error('No price found!');
+    return;
   }
   const itemPriceString = itemPriceSpan?.textContent?.trim();
   let itemPrice: number | undefined;
@@ -284,7 +287,8 @@ function parseResultDiv(result: HTMLDivElement): KakakuItem | null {
   }
 
   if (!kakakuId) {
-    throw Error('kakakuId not found!');
+    // throw Error('kakakuId not found!');
+    return;
   }
 
   const itemDateNode: HTMLParagraphElement | null = result.querySelector(
@@ -492,13 +496,16 @@ function parseRadioFilterOption(li: HTMLLIElement) {
   return filterOption;
 }
 
-export function parsePartListTable(partListTable: HTMLTableElement): Part[] {
-  const parts: Part[] = [];
+export function parsePartListTable(
+  partListTable: HTMLTableElement,
+): (Part | undefined)[] {
+  const parts: (Part | undefined)[] = [];
   const rows: NodeListOf<HTMLTableRowElement> =
     partListTable.querySelectorAll('tr.tr__product');
   rows.forEach((tr) => {
     const part = parsePartRow(tr);
     if (!part) {
+      parts.push(undefined);
       return;
     }
     parts.push(part);
@@ -552,10 +559,7 @@ export function parseKakakuItemResponse(
   const parser = new DOMParser();
   const root = parser.parseFromString(responseHtmlText, 'text/html');
   // console.log(root);
-  const makerSpan: HTMLSpanElement | null = root.querySelector(
-    'li.makerLabel > div.cateBox > span.cateBoxPare',
-  );
-  const maker = makerSpan?.textContent?.trim();
+  const maker = root.querySelector('li.makerLabel a')?.textContent?.trim();
   // console.log('maker', maker);
   const releaseDateStr = root
     .querySelector('div.releaseDateWrap')
@@ -592,9 +596,7 @@ export function parseKakakuItemResponse(
   }
   // console.log('productInfoEle', productInfoEle);
   const imgUrl = (
-    productInfoEle.querySelector(
-      '#imgBox img[itemprop="image"]',
-    ) as HTMLImageElement | null
+    productInfoEle.querySelector('#imgBox img') as HTMLImageElement | null
   )?.src;
   const priceStr = productInfoEle
     .querySelector('#priceBox span.priceTxt')

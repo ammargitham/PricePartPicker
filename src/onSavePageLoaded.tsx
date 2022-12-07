@@ -1,13 +1,13 @@
-import React from 'react';
-import ReactDOM, { unmountComponentAtNode } from 'react-dom';
+import { unmountComponentAtNode } from 'react-dom';
 
-import KakakuPrice from './components/KakakuPrice';
+import browser from 'webextension-polyfill';
+
 import { parsePartListTable } from './htmlParsers';
-import { Part } from './types';
+import { addKakakuColumns } from './partListTableHelper';
 
 let partListTable: HTMLTableElement | null;
-let kakakuTotalPriceCell: HTMLTableCellElement | undefined;
 let partPrices: Record<string, number | undefined> = {};
+let partPickerPriceCells: HTMLTableCellElement[] = [];
 
 const eventListener: EventListener = async (e) => {
   // console.log(e);
@@ -29,101 +29,62 @@ const eventListener: EventListener = async (e) => {
   }
   // reset part prices
   partPrices = {};
+  partPickerPriceCells = [];
   partListTable = partListTableTemp;
   const parts = parsePartListTable(partListTable);
   // console.table(parts);
   // const results = await fetchPartsInfo(parts);
   // console.table(results);
-  addKakakuColumns(partListTable, parts);
+  browser.storage.sync.get('options').then((result) => {
+    const options = (result.options || {}) as Record<string, unknown>;
+    addKakakuColumns(
+      parts,
+      partListTable,
+      partPrices,
+      partPickerPriceCells,
+      options,
+    );
+    addActions(options);
+  });
 };
 
-function updateTotal() {
-  if (!kakakuTotalPriceCell) {
+function addActions(options: Record<string, unknown>) {
+  const actionsDiv: HTMLDivElement | null = document.querySelector(
+    'div.partlist__title--actions',
+  );
+  if (!actionsDiv) {
     return;
   }
-  // console.log(partPrices);
-  const total = Object.values(partPrices).reduce((prev, price) => {
-    if (!price) {
-      return prev;
-    }
-    return (prev || 0) + price;
-  }, 0);
-  kakakuTotalPriceCell.textContent = `¥${
-    total ? total.toLocaleString('ja-JP') : 0
-  }`;
+  // console.log(actionsDiv);
+  const isHidden = !!options.pppHidden;
+  const hidePriceButton = document.createElement('button');
+  hidePriceButton.dataset.kakaku = 'true';
+  hidePriceButton.dataset.priceHidden = `${isHidden}`;
+  hidePriceButton.classList.add('button', 'button--small');
+  hidePriceButton.textContent = isHidden
+    ? 'Show PartPicker prices'
+    : 'Hide PartPicker prices';
+  hidePriceButton.onclick = () => {
+    toggleHidePrice(hidePriceButton);
+    options.pppHidden = !options.pppHidden;
+    browser.storage.sync.set({ options });
+  };
+  actionsDiv.appendChild(hidePriceButton);
 }
 
-function addKakakuColumns(partListTable: HTMLTableElement, parts: Part[]) {
-  if (partListTable.dataset.kakaku === 'true') {
-    // columns already added
-    return;
-  }
-  // console.log(partListTable);
-  const headerRow: HTMLTableRowElement | null = partListTable.querySelector(
-    'thead tr:first-child',
-  );
-  // console.log(headerRow);
-  if (!headerRow) {
-    return;
-  }
-  const partPickerPriceCell: HTMLTableHeaderCellElement | null =
-    headerRow.querySelector('th.th__price');
-  if (!partPickerPriceCell) {
-    return;
-  }
-  const kakakuHeaderPriceCell = document.createElement('th');
-  kakakuHeaderPriceCell.dataset.kakaku = 'true';
-  kakakuHeaderPriceCell.innerHTML = 'kakaku.com<br>Price';
-  kakakuHeaderPriceCell.style.paddingRight = '1rem';
-  kakakuHeaderPriceCell.style.minWidth = '9rem';
-  headerRow.insertBefore(kakakuHeaderPriceCell, partPickerPriceCell);
-
-  const rows: NodeListOf<HTMLTableRowElement> = partListTable.querySelectorAll(
-    'tbody tr.tr__product',
-  );
-  // console.log(rows);
-  rows.forEach((row, i) => {
-    const priceCell: HTMLTableCellElement | null =
-      row.querySelector('td.td__price');
-    if (!priceCell) {
+function toggleHidePrice(hidePriceButton: HTMLButtonElement) {
+  const isHidden = hidePriceButton.dataset.priceHidden === 'true';
+  partPickerPriceCells.forEach((c) => {
+    if (isHidden) {
+      c.style.display = 'table-cell';
       return;
     }
-    let kakakuPriceCell = document.createElement('td');
-    kakakuPriceCell.dataset.kakaku = 'true';
-    kakakuPriceCell.textContent = '';
-    kakakuPriceCell = row.insertBefore(kakakuPriceCell, priceCell);
-    const part = parts[i];
-    if (!part) {
-      return;
-    }
-    ReactDOM.render(
-      <KakakuPrice
-        part={part}
-        onPriceChange={(price) => {
-          partPrices[part.partPickerId] = price;
-          updateTotal();
-        }}
-      />,
-      kakakuPriceCell,
-    );
+    c.style.display = 'none';
   });
-  const totalRow: HTMLTableRowElement | null =
-    partListTable.querySelector('tbody tr.tr__total');
-  if (!totalRow) {
-    return;
-  }
-  // console.log(totalRow);
-  const priceCell = totalRow.querySelector('td.td__price');
-  if (!priceCell) {
-    return;
-  }
-  kakakuTotalPriceCell = document.createElement('td');
-  kakakuTotalPriceCell.dataset.kakaku = 'true';
-  kakakuTotalPriceCell.style.fontSize = '1.25rem';
-  kakakuTotalPriceCell.style.fontWeight = '700';
-  kakakuTotalPriceCell.textContent = '¥0';
-  kakakuTotalPriceCell = totalRow.insertBefore(kakakuTotalPriceCell, priceCell);
-  partListTable.dataset.kakaku = 'true';
+  hidePriceButton.textContent = isHidden
+    ? 'Hide PartPicker prices'
+    : 'Show PartPicker prices';
+  hidePriceButton.dataset.priceHidden = isHidden ? 'false' : 'true';
 }
 
 export default function onSavePageLoaded(): void {

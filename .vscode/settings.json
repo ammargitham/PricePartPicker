@@ -3,6 +3,7 @@
   "css.lint.unknownAtRules": "ignore",
   "cSpell.words": [
     "clkrank",
+    "colspans",
     "Dexie",
     "heroicons",
     "indexeddb",
@@ -11,6 +12,7 @@
     "Kakaku",
     "nocompatible",
     "partlist",
+    "partlists",
     "pcpartpicker",
     "priceb",
     "pricet",

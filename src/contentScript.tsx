@@ -1,4 +1,5 @@
 import { AllowedPath, allowedPathsRegexMap } from './constants';
+import onListPageLoaded from './onListPageLoaded';
 import onSavePageLoaded from './onSavePageLoaded';
 
 function updateThemeClasses(htmlEle: HTMLElement) {
@@ -41,32 +42,20 @@ function matchPage(pathname: string) {
 function onUrlChange(url: string) {
   const parsedUrl = new URL(url);
   const pathname = parsedUrl.pathname;
-  // const hash = parsedUrl.hash;
-  // console.log(pathname, hash);
   const page = matchPage(pathname);
   if (!page) {
     return;
   }
-  // console.log('on page', page);
-  onPageChange(
-    page,
-    // {
-    //   hash,
-    // }
-  );
+  onPageChange(page);
 }
 
-function onPageChange(
-  page: AllowedPath,
-  // extras: {
-  //   hash?: string;
-  // },
-) {
+function onPageChange(page: AllowedPath) {
   switch (page) {
     case 'saved':
       onSavePageLoaded();
       break;
-    case 'other':
+    case 'list':
+      onListPageLoaded();
       break;
   }
 }

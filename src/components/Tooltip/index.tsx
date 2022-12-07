@@ -85,8 +85,9 @@ export default function Tooltip({
         label={label}
         className={`${className || ''}
         absolute px-3 py-2 min-w-[5rem] max-w-[25rem]
-        z-10 text-sm font-light text-gray-500 bg-white border border-gray-200
-        rounded-lg shadow-sm dark:text-gray-400 dark:border-gray-600 dark:bg-gray-800`}
+        z-10 text-gray-500 bg-white border border-gray-200
+        rounded-lg shadow-sm dark:text-gray-400 dark:border-gray-600
+        dark-mode:bg-gray-800`}
         aria-label={ariaLabel}
         position={centered}
         isVisible={isActuallyVisible}

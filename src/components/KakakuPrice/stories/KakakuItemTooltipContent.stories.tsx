@@ -40,7 +40,7 @@ const kakakuItem: KakakuItem = {
 
 export const Default = (): JSX.Element => (
   <div
-    className="min-w-[5rem] max-w-[25rem] w-fit z-10 text-sm font-light text-gray-500
+    className="min-w-[5rem] max-w-[25rem] w-fit z-10 text-gray-500
     bg-white border border-gray-200 rounded-lg shadow-sm dark:text-gray-400
     dark:border-gray-600 dark:bg-gray-800"
   >

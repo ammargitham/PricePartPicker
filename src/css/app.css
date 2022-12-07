@@ -18,6 +18,18 @@ body {
   svg {
     display: unset;
   }
+
+  .stop-color-yellow-300 {
+    stop-color: theme("colors.yellow.300");
+  }
+
+  .stop-color-gray-300 {
+    stop-color: theme("colors.gray.300");
+  }
+
+  .stop-color-gray-500 {
+    stop-color: theme("colors.gray.500");
+  }
 }
 
 /* Used to detect in JavaScript if apps have loaded styles or not. */
@@ -56,3 +68,18 @@ body {
   background-size: 100% 100%;
   border-color: transparent;
 } */
+
+#partlist td.td__name > a.price-part-picker.name,
+#user-saved-partlists .partlist td.td__name > a.price-part-picker.name {
+  display: block;
+  font-size: small;
+  font-weight: normal;
+  font-style: italic;
+  margin-top: 0.25rem;
+}
+
+#partlist td.td__name > a.price-part-picker.name > span.kakaku,
+#user-saved-partlists .partlist td.td__name > a.price-part-picker.name > span.kakaku {
+  margin-right: 0.25rem;
+  color: #B8B8C8;
+}
