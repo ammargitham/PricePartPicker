@@ -111,4 +111,25 @@ module.exports = {
     // Return the final Webpack configuration
     return config;
   },
+  previewHead: (head) => (`
+    ${head}
+    <script type="text/javascript">
+      function updateTheme() {
+        const themeString = localStorage.getItem('sb-addon-themes-3');
+        if (themeString) {
+          const theme = JSON.parse(themeString);
+          if (theme['current'] === 'light') {
+            document.documentElement.classList.remove('dark', 'dark-mode');
+            document.documentElement.classList.add('light-mode');
+          } else {
+            document.documentElement.classList.remove('light-mode');
+            document.documentElement.classList.add('dark', 'dark-mode');
+          }
+        }
+      }
+      window.addEventListener('storage', (e) => {
+        updateTheme();
+      });
+    </script>
+  `),
 };

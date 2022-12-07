@@ -13,13 +13,7 @@ export default {
 
 const getPartPickerTable = (component: JSX.Element) => {
   return (
-    <div
-      className="dark-mode"
-      style={{
-        backgroundColor: '#282838',
-        color: 'white',
-      }}
-    >
+    <div className="wrapper wrapper__pageContent">
       <div
         id="user-saved-partlists"
         className="main-content xs-col-12 md-col-9 lg-col-9 p-4"

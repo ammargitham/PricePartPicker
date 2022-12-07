@@ -1,31 +1,33 @@
-// import browser from 'webextension-polyfill';
 import { AllowedPath, allowedPathsRegexMap } from './constants';
 import onSavePageLoaded from './onSavePageLoaded';
 
-// const fetchPort = browser.runtime.connect({ name: 'fetch' });
-// fetchPort.postMessage({
-//   url: 'https://kakaku.com/search_results/3060ti/?category=0001_0028&sort=priceb',
-// });
-// fetchPort.onMessage.addListener((msg) => {
-//   console.log(msg);
-// });
+function updateThemeClasses(htmlEle: HTMLElement) {
+  const classList = htmlEle.classList;
+  if (classList.contains('dark-mode') && classList.contains('dark')) {
+    return;
+  }
+  if (classList.contains('light-mode') && !classList.contains('dark')) {
+    return;
+  }
+  if (classList.contains('dark-mode')) {
+    htmlEle.classList.add('dark');
+    return;
+  }
+  htmlEle.classList.remove('dark');
+}
 
-// browser.runtime.onMessage.addListener((request: MessageEvent) => {
-// switch (request.event) {
-//   case Event.URL_CHANGE:
-//     const event = request as UrlChangeEvent;
-//     onUrlChange(event.url);
-//     break;
-//   default:
-//     break;
-// }
-// });
+const classChangeObserverCallback: MutationCallback = (mutationList) => {
+  mutationList.forEach((mutation) => {
+    if (mutation.type === 'attributes' && mutation.attributeName === 'class') {
+      updateThemeClasses(mutation.target as HTMLElement);
+    }
+  });
+};
 
-// window.addEventListener('hashchange', (e) => {
-//   currentUrl = e.newURL;
-//   // console.log(currentUrl);
-//   onUrlChange();
-// });
+const observer = new MutationObserver(classChangeObserverCallback);
+observer.observe(document.documentElement, { attributes: true });
+
+updateThemeClasses(document.documentElement);
 
 function matchPage(pathname: string) {
   for (const [path, regex] of Object.entries(allowedPathsRegexMap)) {
