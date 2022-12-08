@@ -3,7 +3,7 @@ import ReactDOM from 'react-dom';
 
 import KakakuPrice from './components/KakakuPrice';
 import { KakakuItem, Part } from './types';
-import { getFullName, insertAfter } from './utils';
+import { getFullName, htmlToElement, insertAfter } from './utils';
 
 function updateTotal(
   kakakuTotalPriceCell: HTMLTableCellElement | null,
@@ -75,6 +75,13 @@ export function addKakakuColumns(
   // headerRow.insertBefore(kakakuHeaderPriceCell, partPickerPriceCell);
   insertAfter(kakakuHeaderPriceCell, partPickerPriceCell);
 
+  // fix buy col width
+  const buyHeader: HTMLTableCellElement | null =
+    headerRow.querySelector('th.th__buy');
+  if (buyHeader) {
+    buyHeader.style.width = 'auto';
+  }
+
   const totalRow: HTMLTableRowElement | null = partListTable.querySelector(
     'tbody tr.tr__total--final',
   );
@@ -135,6 +142,13 @@ export function addKakakuColumns(
     const nameCell: HTMLTableCellElement | null =
       row.querySelector('td.td__name');
 
+    const buyButton: HTMLAnchorElement | null = row.querySelector(
+      'td.td__buy > a.button',
+    );
+
+    const whereCell: HTMLTableCellElement | null =
+      row.querySelector('td.td__where');
+
     const part = parts[i];
     if (!part) {
       return;
@@ -147,6 +161,12 @@ export function addKakakuColumns(
           updateTotal(kakakuTotalPriceCell, partPrices);
           if (nameCell) {
             updateName(nameCell, item);
+          }
+          if (buyButton) {
+            updateBuyButton(buyButton, item);
+          }
+          if (whereCell) {
+            updateWhere(whereCell, item);
           }
         }}
       />,
@@ -211,4 +231,82 @@ function createKakakuItemNameElement(item: KakakuItem) {
   const text = document.createTextNode(getFullName(item.name, item.maker));
   a.appendChild(text);
   return a;
+}
+
+const newTabIcon = htmlToElement(`
+  <svg xmlns="http://www.w3.org/2000/svg"
+    fill="none"
+    viewBox="0 0 24 24"
+    stroke-width="2"
+    stroke="currentColor"
+    class="w-6 h-6 ml-1 icon"
+    style="fill: transparent; vertical-align: sub;"
+  >
+    <path
+      stroke-linecap="round"
+      stroke-linejoin="round"
+      d="M13.5 6H5.25A2.25 2.25 0 003 8.25v10.5A2.25 2.25 0 005.25 21h10.5A2.25
+      2.25 0 0018 18.75V10.5m-10.5 6L21 3m0 0h-5.25M21 3v5.25"
+    />
+  </svg>
+`);
+
+function updateBuyButton(buyButton: HTMLAnchorElement, item?: KakakuItem) {
+  if (!item) {
+    buyButton.href = '#';
+    buyButton.textContent = 'Buy';
+    buyButton.classList.add('button--disabled');
+    const icon = buyButton.querySelector('svg.icon');
+    if (icon) {
+      buyButton.removeChild(icon);
+    }
+    return;
+  }
+  buyButton.target = '_blank';
+  buyButton.rel = 'noopener noreferrer';
+  buyButton.href = (item.shop && item.shop.itemUrl) || item.itemUrl;
+  const firstChild = buyButton.firstChild;
+  if (firstChild) {
+    firstChild.textContent =
+      item.shop && item.shop.itemUrl ? 'Go to shop page' : 'Go to product page';
+  }
+  buyButton.classList.remove('button--disabled');
+  const icon = buyButton.querySelector('svg.icon');
+  if (icon) {
+    return;
+  }
+  buyButton.appendChild(newTabIcon.cloneNode(true));
+}
+
+function updateWhere(whereCell: HTMLTableCellElement, item?: KakakuItem) {
+  // remove any kakaku link previously present
+  const kakakuLink = whereCell.querySelector('a[data-kakaku="true"]');
+  kakakuLink?.remove();
+
+  if (!item || !item.shop) {
+    // un-hide any other link
+    const originalLink = whereCell.querySelector('a');
+    if (originalLink) {
+      originalLink.style.display = 'block';
+      return;
+    }
+    // add td--empty class
+    whereCell.classList.add('td--empty');
+    return;
+  }
+  // hide any link already present
+  const originalLink = whereCell.querySelector('a');
+  if (originalLink) {
+    originalLink.style.display = 'none';
+  }
+  // add our kakaku link
+  const link = document.createElement('a');
+  link.dataset['kakaku'] = 'true';
+  link.target = '_blank';
+  link.rel = 'noopener noreferrer';
+  link.href = item.shop.itemUrl || '';
+  link.textContent = item.shop.name || '';
+  link.style.width = 'auto';
+  whereCell.classList.remove('td--empty');
+  whereCell.appendChild(link);
 }

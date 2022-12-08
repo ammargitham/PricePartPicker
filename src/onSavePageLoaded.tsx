@@ -10,8 +10,12 @@ let partPrices: Record<string, number | undefined> = {};
 let partPickerPriceCells: HTMLTableCellElement[] = [];
 
 const eventListener: EventListener = async (e) => {
+  const target = e.target;
+  if (!(target instanceof HTMLDivElement) || target.id !== 'partlist_render') {
+    return;
+  }
   // console.log(e);
-  const partListDiv = e.target as HTMLDivElement | null;
+  const partListDiv = target as HTMLDivElement | null;
   if (!partListDiv) {
     return;
   }
