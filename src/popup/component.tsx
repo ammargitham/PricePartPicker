@@ -1,7 +1,9 @@
 import React from 'react';
-import { Hello } from '@src/components/hello';
+
 import browser, { Tabs } from 'webextension-polyfill';
+
 import { Scroller } from '@src/components/scroller';
+
 import css from './styles.module.css';
 
 // // // //
@@ -42,7 +44,7 @@ function executeScript(position: number): void {
           args: [position],
         })
         .then(() => {
-          console.log('Done Scrolling');
+          // console.log('Done Scrolling');
         });
     });
 }
@@ -59,7 +61,6 @@ export function Popup() {
   return (
     <div className={css.popupContainer}>
       <div className="mx-4 my-4">
-        <Hello />
         <hr />
         <Scroller
           onClickScrollTop={() => {
