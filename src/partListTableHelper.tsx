@@ -227,9 +227,17 @@ function updateName(nameCell: HTMLTableCellElement, item?: KakakuItem) {
 function createKakakuItemNameElement(item: KakakuItem) {
   const a = document.createElement('a');
   a.href = item.itemUrl;
-  a.classList.add('price-part-picker', 'name');
+  a.classList.add(
+    'price-part-picker',
+    'name',
+    'tw-block',
+    '!text-sm',
+    '!font-normal',
+    'italic',
+    'mt-1',
+  );
   const span = document.createElement('span');
-  span.classList.add('kakaku');
+  span.classList.add('kakaku', 'mr-1', 'text-gray-600', 'dark:text-slate-400');
   span.textContent = `${browser.i18n.getMessage('kakaku_com')}:`;
   a.appendChild(span);
   const text = document.createTextNode(getFullName(item.name, item.maker));
@@ -260,6 +268,7 @@ function updateBuyButton(buyButton: HTMLAnchorElement, item?: KakakuItem) {
     buyButton.href = '#';
     buyButton.textContent = 'Buy';
     buyButton.classList.add('button--disabled');
+    buyButton.classList.remove('whitespace-nowrap');
     const icon = buyButton.querySelector('svg.icon');
     if (icon) {
       buyButton.removeChild(icon);
@@ -276,6 +285,7 @@ function updateBuyButton(buyButton: HTMLAnchorElement, item?: KakakuItem) {
     );
   }
   buyButton.classList.remove('button--disabled');
+  buyButton.classList.add('whitespace-nowrap');
   const icon = buyButton.querySelector('svg.icon');
   if (icon) {
     return;
