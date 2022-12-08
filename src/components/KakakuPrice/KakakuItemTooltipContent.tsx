@@ -1,5 +1,7 @@
 import React from 'react';
 
+import browser from 'webextension-polyfill';
+
 import { KakakuItem } from '@src/types';
 import { getFullName, getRatingText, getReleaseDate } from '@src/utils';
 
@@ -22,7 +24,7 @@ export default function KakakuItemTooltipContent({
           <img
             className="m-auto min-h-[8rem] max-h-[12rem]"
             src={kakakuItem.imgUrl}
-            alt="product image"
+            alt="Image"
           />
         </a>
       )}
@@ -43,7 +45,12 @@ export default function KakakuItemTooltipContent({
           dark:text-gray-400"
           >
             {kakakuItem.releaseDate ? (
-              <li>{getReleaseDate(kakakuItem.releaseDate)}</li>
+              <li>
+                {browser.i18n.getMessage('release_date')}:
+                <span className="ml-1">
+                  {getReleaseDate(kakakuItem.releaseDate)}
+                </span>
+              </li>
             ) : null}
             {kakakuItem.itemDetails?.map((detail, i) => (
               <li key={i}>{detail}</li>
@@ -58,11 +65,12 @@ export default function KakakuItemTooltipContent({
           </span>
           {kakakuItem.shop && kakakuItem.shop.name ? (
             <span className="text-sm text-gray-400 ml-4">
-              (<span className="font-light ">Sold by</span>{' '}
-              <span className="text-gray-900 dark:text-white">
+              <span className="font-light ">
+                {browser.i18n.getMessage('sold_by')}
+              </span>
+              <span className="ml-1 text-gray-900 dark:text-white">
                 {kakakuItem.shop.name}
               </span>
-              )
             </span>
           ) : null}
         </div>

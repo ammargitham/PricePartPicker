@@ -45,9 +45,9 @@ function addActions(options: Record<string, unknown>) {
   anchor.dataset.priceHidden = `${isHidden}`;
   anchor.href = '#';
   anchor.appendChild(isHidden ? icons[0] : icons[1]);
-  const text: string = isHidden
-    ? 'Show PartPicker prices'
-    : 'Hide PartPicker prices';
+  const text: string = browser.i18n.getMessage(
+    isHidden ? 'show_pcpartpicker_prices' : 'hide_pcpartpicker_prices',
+  );
   const textNode = document.createTextNode(text);
   anchor.appendChild(textNode);
   anchor.onclick = (e) => {
@@ -97,9 +97,9 @@ function toggleHidePrice(anchor: HTMLAnchorElement, icons: SVGElement[]) {
     }
   }
   anchor.replaceChild(isHidden ? icons[1] : icons[0], anchor.childNodes[0]);
-  anchor.childNodes[1].textContent = isHidden
-    ? 'Hide PartPicker prices'
-    : 'Show PartPicker prices';
+  anchor.childNodes[1].textContent = browser.i18n.getMessage(
+    isHidden ? 'hide_pcpartpicker_prices' : 'show_pcpartpicker_prices',
+  );
   anchor.dataset.priceHidden = isHidden ? 'false' : 'true';
 }
 

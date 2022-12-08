@@ -1,5 +1,7 @@
 import React from 'react';
 
+import browser from 'webextension-polyfill';
+
 import { CheckIcon } from '@heroicons/react/24/solid';
 
 import { KakakuItem } from '@src/types';
@@ -59,9 +61,14 @@ export default function SearchResultItem({
                 ratingText={getRatingText(searchResult.rating)}
               />
             ) : null}
-            <div className="pr-3">
-              {getReleaseDate(searchResult.releaseDate)}
-            </div>
+            {searchResult.releaseDate ? (
+              <div className="pr-3">
+                {browser.i18n.getMessage('release_date')}:
+                <span className="ml-1">
+                  {getReleaseDate(searchResult.releaseDate)}
+                </span>
+              </div>
+            ) : null}
             {/* Can be later used to add more metadata */}
             {/* <div className="px-3">2</div>
             <div className="pl-3">3</div> */}
@@ -74,7 +81,7 @@ export default function SearchResultItem({
           <span>
             {searchResult.price
               ? `¥${searchResult.price.toLocaleString('ja-JP')}`
-              : 'No price'}
+              : browser.i18n.getMessage('no_price')}
           </span>
           <button
             type="button"
@@ -92,7 +99,11 @@ export default function SearchResultItem({
             onClick={isUsed ? undefined : onUseClick}
           >
             {isUsed ? <CheckIcon className="mr-2 -ml w-3.5 h-3.5" /> : null}
-            <span>{isUsed ? 'Using this item' : 'Use this item'}</span>
+            <span>
+              {browser.i18n.getMessage(
+                isUsed ? 'using_this_item' : 'use_this_item',
+              )}
+            </span>
           </button>
         </div>
       </div>

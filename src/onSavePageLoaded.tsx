@@ -65,9 +65,9 @@ function addActions(options: Record<string, unknown>) {
   hidePriceButton.dataset.kakaku = 'true';
   hidePriceButton.dataset.priceHidden = `${isHidden}`;
   hidePriceButton.classList.add('button', 'button--small');
-  hidePriceButton.textContent = isHidden
-    ? 'Show PartPicker prices'
-    : 'Hide PartPicker prices';
+  hidePriceButton.textContent = browser.i18n.getMessage(
+    isHidden ? 'show_pcpartpicker_prices' : 'hide_pcpartpicker_prices',
+  );
   hidePriceButton.onclick = () => {
     toggleHidePrice(hidePriceButton);
     options.pppHidden = !options.pppHidden;
@@ -85,9 +85,9 @@ function toggleHidePrice(hidePriceButton: HTMLButtonElement) {
     }
     c.style.display = 'none';
   });
-  hidePriceButton.textContent = isHidden
-    ? 'Hide PartPicker prices'
-    : 'Show PartPicker prices';
+  hidePriceButton.textContent = browser.i18n.getMessage(
+    isHidden ? 'hide_pcpartpicker_prices' : 'show_pcpartpicker_prices',
+  );
   hidePriceButton.dataset.priceHidden = isHidden ? 'false' : 'true';
 }
 

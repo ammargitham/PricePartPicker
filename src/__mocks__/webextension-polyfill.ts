@@ -34,6 +34,11 @@ const browser: unknown = {
       return new Port();
     },
   },
+  i18n: {
+    getMessage: (messageName: string) => {
+      return messageName;
+    },
+  },
 };
 export default browser;
 

@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 
 import deepEqual from 'deep-equal';
+import browser from 'webextension-polyfill';
 
 import { InformationCircleIcon, CheckIcon } from '@heroicons/react/24/solid';
 
@@ -57,7 +58,9 @@ export default function SearchDialogContent({
       <PartInfo part={part} onClose={onClose} />
       <div className="px-4 py-2 flex flex-col overflow-auto">
         <div className="text-sm text-gray-500 dark:text-gray-400">
-          <span className="">Search on kakaku.com</span>
+          <span className="">
+            {browser.i18n.getMessage('search_on_kakaku')}
+          </span>
         </div>
         <Input
           query={query.query}
@@ -112,8 +115,8 @@ export default function SearchDialogContent({
                   ) : null}
                 </div>
                 <Tooltip
-                  label="The current query, category, page will be used to get the cheapest item."
-                  aria-label="The current query, category, page will be used to get the cheapest item."
+                  label={browser.i18n.getMessage('use_query_tooltip')}
+                  aria-label={browser.i18n.getMessage('use_query_tooltip')}
                   className="z-[999]"
                   arrowClassName="z-[1000]"
                 >
@@ -146,9 +149,11 @@ export default function SearchDialogContent({
                       <CheckIcon className="mr-2 -ml w-4 h-4" />
                     ) : null}
                     <span>
-                      {isCurrentQueryUsed
-                        ? 'Using current query'
-                        : 'Use current query'}
+                      {browser.i18n.getMessage(
+                        isCurrentQueryUsed
+                          ? 'using_current_query'
+                          : 'use_current_query',
+                      )}
                     </span>
                     {!isCurrentQueryUsed ? (
                       <InformationCircleIcon className="ml-2 -mr-1 w-5 h-5" />
@@ -156,13 +161,13 @@ export default function SearchDialogContent({
                   </button>
                 </Tooltip>
                 <div className="flex flex-row items-center gap-2">
-                  Sort:
+                  {browser.i18n.getMessage('sort')}:
                   <select
                     className="bg-gray-50 border border-gray-300 text-gray-900
-                  text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500
-                  tw-block w-40 mr-1 p-2 dark:bg-gray-700 dark:border-gray-600
-                  dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500
-                  dark:focus:border-blue-500 appearance-auto"
+                    text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500
+                    tw-block w-40 mr-1 p-2 dark:bg-gray-700 dark:border-gray-600
+                    dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500
+                    dark:focus:border-blue-500"
                     onChange={(e) => {
                       const newSort = e.target.value;
                       const newFilters = query.filters || {};
@@ -180,11 +185,21 @@ export default function SearchDialogContent({
                     }}
                     value={query.filters?.sort || ''}
                   >
-                    <option value="">Standard</option>
-                    <option value="priceb">Price ascending</option>
-                    <option value="pricet">Price descending</option>
-                    <option value="clkrank_d">Popularity</option>
-                    <option value="date">Release date</option>
+                    <option value="">
+                      {browser.i18n.getMessage('sort_standard')}
+                    </option>
+                    <option value="priceb">
+                      {browser.i18n.getMessage('sort_price_asc')}
+                    </option>
+                    <option value="pricet">
+                      {browser.i18n.getMessage('sort_price_desc')}
+                    </option>
+                    <option value="clkrank_d">
+                      {browser.i18n.getMessage('sort_popularity')}
+                    </option>
+                    <option value="date">
+                      {browser.i18n.getMessage('sort_date')}
+                    </option>
                   </select>
                 </div>
               </div>
@@ -226,7 +241,7 @@ export default function SearchDialogContent({
               </div>
             ) : (
               <p className="text-sm font-medium text-gray-900 truncate dark:text-white mt-4">
-                No results
+                {browser.i18n.getMessage('no_results')}
               </p>
             )}
           </div>

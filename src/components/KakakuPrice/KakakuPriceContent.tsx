@@ -1,5 +1,7 @@
 import React from 'react';
 
+import browser from 'webextension-polyfill';
+
 import {
   MagnifyingGlassIcon,
   InformationCircleIcon,
@@ -37,7 +39,7 @@ export default function KakakuPriceContent({
           <span className="font-bold text-sm mr-2">
             {kakakuItem.price
               ? `¥${kakakuItem.price.toLocaleString('ja-JP')}`
-              : 'No price'}
+              : browser.i18n.getMessage('no_price')}
           </span>
           <Tooltip
             className="px-0 py-0 max-w-[30rem] text-sm font-light border-t-white dark:border-t-white"
@@ -56,7 +58,7 @@ export default function KakakuPriceContent({
       )}
       {!searching && !kakakuItem && (
         <>
-          <span>No results</span>
+          <span>{browser.i18n.getMessage('no_results')}</span>
           <MagnifyingGlassIcon
             className="ml-2 w-5 h-5 text-gray-600 dark:text-slate-500 cursor-pointer"
             onClick={openDialog}

@@ -26,7 +26,7 @@ export function getReleaseDate(releaseDate?: ReleaseDate): string {
   const { year, month, day } = releaseDate;
   const padMonth = month.toString().padStart(2, '0');
   const padDay = day.toString().padStart(2, '0');
-  return `Release date: ${year}-${padMonth}-${padDay}`;
+  return `${year}-${padMonth}-${padDay}`;
 }
 
 export function getRatingText(rating?: KakakuItemRating): string {

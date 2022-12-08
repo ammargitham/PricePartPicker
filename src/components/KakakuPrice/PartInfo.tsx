@@ -1,5 +1,7 @@
 import React from 'react';
 
+import browser from 'webextension-polyfill';
+
 import { XMarkIcon } from '@heroicons/react/24/solid';
 
 import { Part } from '@src/types';
@@ -52,7 +54,9 @@ export default function PartInfo({
         onClick={onClose}
       >
         <XMarkIcon className="h-4 w-4 tw-block" />
-        <span className="sr-only">Close modal</span>
+        <span className="sr-only">
+          {browser.i18n.getMessage('close_modal')}
+        </span>
       </button>
     </div>
   );

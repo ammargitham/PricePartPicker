@@ -13,14 +13,6 @@ export default function FilterRadioSectionComponent({
   disabled,
   onOptionChecked,
 }: FilterRadioSectionComponentProps): JSX.Element {
-  // const [checkedOption, setCheckedOption] = useState(() => {
-  //   const filtered = section.options.filter((o) => o.isActive);
-  //   if (filtered.length) {
-  //     return filtered[0];
-  //   }
-  //   return undefined;
-  // });
-
   function getLabel(option: FilterRadioOption): JSX.Element | string {
     const label = option.name;
     if (option.count === undefined) {

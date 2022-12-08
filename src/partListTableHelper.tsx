@@ -1,6 +1,8 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 
+import browser from 'webextension-polyfill';
+
 import KakakuPrice from './components/KakakuPrice';
 import { KakakuItem, Part } from './types';
 import { getFullName, htmlToElement, insertAfter } from './utils';
@@ -69,7 +71,9 @@ export function addKakakuColumns(
   }
   const kakakuHeaderPriceCell = document.createElement('th');
   kakakuHeaderPriceCell.dataset.kakaku = 'true';
-  kakakuHeaderPriceCell.innerHTML = 'kakaku.com<br>Price';
+  const kakakuDotCom = browser.i18n.getMessage('kakaku_com');
+  const priceIntlStr = browser.i18n.getMessage('Price');
+  kakakuHeaderPriceCell.innerHTML = `${kakakuDotCom}<br>${priceIntlStr}`;
   kakakuHeaderPriceCell.style.paddingRight = '1rem';
   kakakuHeaderPriceCell.style.minWidth = '9rem';
   // headerRow.insertBefore(kakakuHeaderPriceCell, partPickerPriceCell);
@@ -226,7 +230,7 @@ function createKakakuItemNameElement(item: KakakuItem) {
   a.classList.add('price-part-picker', 'name');
   const span = document.createElement('span');
   span.classList.add('kakaku');
-  span.textContent = 'kakaku.com:';
+  span.textContent = `${browser.i18n.getMessage('kakaku_com')}:`;
   a.appendChild(span);
   const text = document.createTextNode(getFullName(item.name, item.maker));
   a.appendChild(text);
@@ -267,8 +271,9 @@ function updateBuyButton(buyButton: HTMLAnchorElement, item?: KakakuItem) {
   buyButton.href = (item.shop && item.shop.itemUrl) || item.itemUrl;
   const firstChild = buyButton.firstChild;
   if (firstChild) {
-    firstChild.textContent =
-      item.shop && item.shop.itemUrl ? 'Go to shop page' : 'Go to product page';
+    firstChild.textContent = browser.i18n.getMessage(
+      item.shop && item.shop.itemUrl ? 'go_to_shop_page' : 'go_to_product_page',
+    );
   }
   buyButton.classList.remove('button--disabled');
   const icon = buyButton.querySelector('svg.icon');
