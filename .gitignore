@@ -1,4 +1,5 @@
 dist/js/*
+dist/css/*
 storybook-static/*
 
 /node_modules
