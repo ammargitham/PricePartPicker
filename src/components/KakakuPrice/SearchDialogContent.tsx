@@ -160,7 +160,7 @@ export default function SearchDialogContent({
                     ) : null}
                   </button>
                 </Tooltip>
-                <div className="flex flex-row items-center gap-2">
+                <div className="flex flex-row items-center gap-2 text-gray-900 dark:text-white">
                   {browser.i18n.getMessage('sort')}:
                   <select
                     className="bg-gray-50 border border-gray-300 text-gray-900
@@ -207,7 +207,7 @@ export default function SearchDialogContent({
             {resultPage && resultPage.results.length ? (
               <div className={`overflow-auto ${getScrollbarClasses()}`}>
                 <ul
-                  className="divide-y divide-gray-200 dark:divide-gray-700
+                  className="divide-y divide-gray-300 dark:divide-gray-700
                 pl-2 pr-4"
                 >
                   {resultPage.results.map((r, i) => (
