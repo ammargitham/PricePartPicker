@@ -60,7 +60,7 @@ export default function useKakakuSearch(part: Part): KakakuSearch {
                 query: {
                   query: kakakuItem?.name,
                 },
-                results: [kakakuItem],
+                results: kakakuItem ? [kakakuItem] : [],
               } as SearchResultPage;
             });
           }

@@ -170,7 +170,11 @@ export function addKakakuColumns(
             updateBuyButton(buyButton, item);
           }
           if (whereCell) {
-            updateWhere(whereCell, item);
+            updateWhere(
+              whereCell,
+              item,
+              options?.pppHidden as boolean | undefined,
+            );
           }
         }}
       />,
@@ -293,26 +297,33 @@ function updateBuyButton(buyButton: HTMLAnchorElement, item?: KakakuItem) {
   buyButton.appendChild(newTabIcon.cloneNode(true));
 }
 
-function updateWhere(whereCell: HTMLTableCellElement, item?: KakakuItem) {
+function updateWhere(
+  whereCell: HTMLTableCellElement,
+  item?: KakakuItem,
+  pppHidden?: boolean,
+) {
   // remove any kakaku link previously present
   const kakakuLink = whereCell.querySelector('a[data-kakaku="true"]');
   kakakuLink?.remove();
 
-  if (!item || !item.shop) {
-    // un-hide any other link
-    const originalLink = whereCell.querySelector('a');
-    if (originalLink) {
-      originalLink.style.display = 'block';
-      return;
-    }
-    // add td--empty class
-    whereCell.classList.add('td--empty');
-    return;
-  }
   // hide any link already present
   const originalLink = whereCell.querySelector('a');
   if (originalLink) {
     originalLink.style.display = 'none';
+  }
+
+  if (!item || !item.shop) {
+    if (!pppHidden) {
+      // un-hide any other link
+      const originalLink = whereCell.querySelector('a');
+      if (originalLink) {
+        originalLink.style.display = 'block';
+        return;
+      }
+    }
+    // add td--empty class
+    whereCell.classList.add('td--empty');
+    return;
   }
   // add our kakaku link
   const link = document.createElement('a');

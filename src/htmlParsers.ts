@@ -9,6 +9,7 @@ import {
   FilterRadioSection,
   KakakuItem,
   KakakuItemRating,
+  KakakuItemShop,
   KakakuPagination,
   KakakuPaginationPage,
   PageResultInfo,
@@ -601,18 +602,35 @@ export function parseKakakuItemResponse(
   const priceStr = productInfoEle
     .querySelector('#priceBox span.priceTxt')
     ?.textContent?.trim();
-  // console.log(priceStr);
-  if (!priceStr) {
-    return;
-  }
-  const price = parsePrice(priceStr);
-  if (!price) {
-    return;
+  let price: number | undefined;
+  if (priceStr) {
+    price = parsePrice(priceStr);
+    if (price && isNaN(price)) {
+      price = undefined;
+    }
   }
   const itemRating = parseKakakuItemRating(productInfoEle);
   // console.log('price', price);
   const priceTable: HTMLTableElement | null =
     root.querySelector('table.p-priceTable');
+  const shop = parseShopFromPriceTable(priceTable);
+  return {
+    itemUrl,
+    kakakuId,
+    name,
+    price,
+    imgUrl,
+    maker,
+    releaseDate,
+    itemDetails,
+    shop,
+    rating: itemRating,
+  };
+}
+
+function parseShopFromPriceTable(
+  priceTable?: HTMLTableElement | null,
+): KakakuItemShop | undefined {
   if (!priceTable) {
     return;
   }
@@ -645,19 +663,8 @@ export function parseKakakuItemResponse(
   const shopItemUrl = shopItemLinkEle?.href?.trim();
   // console.log(shopItemPageUrl);
   return {
-    itemUrl,
-    kakakuId,
-    name,
-    price,
-    imgUrl,
-    maker,
-    releaseDate,
-    itemDetails,
-    shop: {
-      name: shopName,
-      itemUrl: shopItemUrl,
-    },
-    rating: itemRating,
+    name: shopName,
+    itemUrl: shopItemUrl,
   };
 }
 

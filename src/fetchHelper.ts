@@ -99,5 +99,7 @@ export async function getKakakuItem(
     return;
   }
   // console.log(response.text);
-  return parseKakakuItemResponse(kakakuId, url, response.text);
+  const res = parseKakakuItemResponse(kakakuId, url, response.text);
+  // console.log(kakakuId, res);
+  return res;
 }
