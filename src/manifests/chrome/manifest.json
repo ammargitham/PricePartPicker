@@ -32,9 +32,6 @@
     "https://kakaku.com/"
   ],
   "permissions": [
-    "webRequest",
-    "webNavigation",
-    "storage",
-    "unlimitedStorage"
+    "storage"
   ]
 }
