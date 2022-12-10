@@ -1,4 +1,3 @@
-![GPLv3 License](https://img.shields.io/github/license/ammargitham/PricePartPicker)
 [![PR's Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg?style=flat)](http://makeapullrequest.com)
 
 <img align="left" width="40" height="40" src="./images/icon-128.png" alt="Price Part Picker">
@@ -119,3 +118,22 @@ There are two ways of running the extension in Mozilla Firefox. Make sure you ha
 -   [Chrome Extension Developer Guide](https://developer.chrome.com/extensions/devguide)
 -   [Firefox Extension Developer Guide](https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/WebExtensions/Your_first_WebExtension)
 -   [Eslint + Prettier + Typescript Guide](https://dev.to/robertcoopercode/using-eslint-and-prettier-in-a-typescript-project-53jb)
+
+
+```
+Price Part Picker
+Copyright (C) 2022  Ammar Githam
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/>.
+```
