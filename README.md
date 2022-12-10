@@ -3,7 +3,7 @@
 
 <img align="left" width="40" height="40" src="./images/icon-128.png" alt="Price Part Picker">
 
-# &nbsp; Price Part Picker <sub><sup><sub><sup><i>(need a better name and icon)</i></sup></sub></sup></sub>
+# Price Part Picker <sub><sup><sub><sup><i>(need a better name and icon)</i></sup></sub></sup></sub>
 
 A web Extension to show [kakaku.com](kakaku.com) prices on [PCPartPicker](pcpartpicker.com). Currently only on the 'Saved Parts Lists' page and 'Choose Your Parts' page.
 
