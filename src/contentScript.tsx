@@ -2,6 +2,8 @@ import { AllowedPath, allowedPathsRegexMap } from './constants';
 import onListPageLoaded from './onListPageLoaded';
 import onSavePageLoaded from './onSavePageLoaded';
 
+import './css/app.css';
+
 function updateThemeClasses(htmlEle: HTMLElement) {
   const classList = htmlEle.classList;
   if (classList.contains('dark-mode') && classList.contains('dark')) {

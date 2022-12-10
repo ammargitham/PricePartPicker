@@ -12,7 +12,9 @@ module.exports = {
     "<THIRD_PARTY_MODULES>",
     "^@(?!src)",
     "^@src",
-    "^[.]",
+    "(?<!.css)$",
+    ".css$",
+
   ],
   importOrderSeparation: true,
 };

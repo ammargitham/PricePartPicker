@@ -16,7 +16,7 @@ module.exports = {
     },
   },
 
-  ignorePatterns: ['dist/*'],
+  ignorePatterns: ['dist/*', 'build/*'],
   rules: {
     'react/prop-types': 0,
     'no-console': ['error', { allow: ['warn', 'error'] }],

@@ -1,0 +1,77 @@
+{
+  "show_pcpartpicker_prices": {
+    "message": "Show PCPartPicker prices"
+  },
+  "hide_pcpartpicker_prices": {
+    "message": "Hide PCPartPicker prices"
+  },
+  "kakaku_com": {
+    "message": "kakaku.com"
+  },
+  "Price": {
+    "message": "Price"
+  },
+  "go_to_shop_page": {
+    "message": "Go to shop page"
+  },
+  "go_to_product_page": {
+    "message": "Go to product page"
+  },
+  "release_date": {
+    "message": "Release date"
+  },
+  "search": {
+    "message": "Search"
+  },
+  "sold_by": {
+    "message": "Sold by"
+  },
+  "no_price": {
+    "message": "No price"
+  },
+  "no_results": {
+    "message": "No results"
+  },
+  "close_modal": {
+    "message": "Close modal"
+  },
+  "showing_x_of_x": {
+    "message": "Showing <b>$1</b> - <b>$2</b> of <b>$3</b>"
+  },
+  "search_on_kakaku": {
+    "message": "Search on kakaku.com"
+  },
+  "use_query_tooltip": {
+    "message": "The current query, category, page will be used to get the cheapest item."
+  },
+  "using_current_query": {
+    "message": "Using current query"
+  },
+  "use_current_query": {
+    "message": "Use current query"
+  },
+  "sort": {
+    "message": "Sort"
+  },
+  "sort_standard": {
+    "message": "Standard"
+  },
+  "sort_price_asc": {
+    "message": "Price ascending"
+  },
+  "sort_price_desc": {
+    "message": "Price descending"
+  },
+  "sort_popularity": {
+    "message": "Popularity"
+  },
+  "sort_date": {
+    "message": "Release date"
+  },
+  "using_this_item": {
+    "message": "Using this item"
+  },
+  "use_this_item": {
+    "message": "Use this item"
+  }
+}

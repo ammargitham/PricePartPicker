@@ -1,0 +1,45 @@
+
+{
+  "manifest_version": 3,
+  "name": "Price Part Picker",
+  "description": "Display kakaku.com prices on PCPartPicker.com",
+  "version": "1.0.0",
+  "default_locale": "en",
+  "browser_specific_settings": {
+    "gecko": {
+      "id": "ammar.githam@outlook.com"
+    }
+  },
+  "background": {
+    "scripts": ["js/backgroundPage.js"]
+  },
+  "icons": {
+    "16": "icon-16.png",
+    "32": "icon-32.png",
+    "48": "icon-48.png",
+    "128": "icon-128.png"
+  },
+  "content_scripts": [
+    {
+      "matches": [
+        "*://*.pcpartpicker.com/*"
+      ],
+      "js": [
+        "js/contentScript.js"
+      ],
+      "css": [
+        "css/contentScript.css"
+      ],
+      "run_at": "document_start"
+    }
+  ],
+  "host_permissions": [
+    "https://kakaku.com/"
+  ],
+  "permissions": [
+    "webRequest",
+    "webNavigation",
+    "storage",
+    "unlimitedStorage"
+  ]
+}

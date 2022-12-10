@@ -13,7 +13,7 @@
         "paths": {
             "@src/*": ["src/*"]
         },
-        "outDir": "dist",
+        "outDir": "build",
         "noImplicitReturns": true,
         "noImplicitThis": true,
         "noImplicitAny": true,

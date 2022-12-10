@@ -1,5 +1,6 @@
-dist/js/*
-dist/css/*
+/build
+/dist
+/profiles
 storybook-static/*
 
 /node_modules
