@@ -19,7 +19,7 @@ A web Extension to show [kakaku.com](kakaku.com) prices on [PCPartPicker](pcpart
 - Dark mode is in sync with the PCPartPicker's dark mode.
 
 **Not completed**
-- Japanese localization (help needed)
+- Japanese localization (help needed, see [this discussion](https://github.com/ammargitham/PricePartPicker/discussions/1))
 
 ---
 
