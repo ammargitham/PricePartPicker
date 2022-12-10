@@ -14,5 +14,6 @@ module.exports = {
     keepProfileChanges: true,
     startUrl: ['https://pcpartpicker.com'],
     browserConsole: true,
+    devtools: true,
   },
 };
