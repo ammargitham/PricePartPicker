@@ -3,7 +3,7 @@
   "manifest_version": 3,
   "name": "Price Part Picker",
   "description": "Display kakaku.com prices on PCPartPicker.com",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "default_locale": "en",
   "browser_specific_settings": {
     "gecko": {
