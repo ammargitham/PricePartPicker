@@ -56,6 +56,7 @@ function onPageChange(page: AllowedPath) {
     case 'saved':
       onSavePageLoaded();
       break;
+    case 'savedList':
     case 'list':
       onListPageLoaded();
       break;

@@ -44,10 +44,11 @@ export enum Event {
   UNSUBSCRIBE_DB_PART = 'unsub_db_part',
 }
 
-export type AllowedPath = 'saved' | 'list';
+export type AllowedPath = 'saved' | 'savedList' | 'list';
 
 export const allowedPathsRegexMap: Record<AllowedPath, RegExp> = {
-  saved: /\/*user\/\S+\/saved\/*/,
+  saved: /\/*user\/\S+\/saved\/$/,
+  savedList: /\/*user\/\S+\/saved\/.+/,
   list: /\/*list\/*/,
 };
 
