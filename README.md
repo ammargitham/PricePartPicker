@@ -1,3 +1,4 @@
+![GitHub](https://img.shields.io/github/license/ammargitham/PricePartPicker)
 [![PR's Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg?style=flat)](http://makeapullrequest.com)
 
 <img align="left" width="40" height="40" src="./images/icon-128.png" alt="Price Part Picker">
