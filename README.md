@@ -8,7 +8,14 @@ A web Extension to show [kakaku.com](kakaku.com) prices on [PCPartPicker](pcpart
 
 *This project was initially created using the [react-typescript-web-extension-starter](https://github.com/aeksco/react-typescript-web-extension-starter) template.*
 
----
+<p align="center">
+  </br></br>
+  <a href="https://chrome.google.com/webstore/detail/price-part-picker/fijhhjlphkaphfkgkcpldmlfffplmkok">
+    <img height="58" src="images/chrome-web-store.png" alt="Chrome Web Store"></a>
+  <a href="https://addons.mozilla.org/en-US/firefox/addon/price-part-picker/">
+    <img height="58" src="images/firefox-get-the-addon.png" alt="Firefox add-ons"></a>
+    </br></br>
+</p>
 
 ## Features
 
@@ -27,7 +34,7 @@ A web Extension to show [kakaku.com](kakaku.com) prices on [PCPartPicker](pcpart
 **Saved parts list (light mode)**
 ![](./images/saved_light_1.jpg)
 
-**Choose you parts (dark mode)**
+**Choose your parts (dark mode)**
 ![](./images/choose_dark_1.jpg)
 
 **Search dialog (light mode)**
