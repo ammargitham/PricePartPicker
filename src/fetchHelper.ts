@@ -23,7 +23,7 @@ async function fetchProxy(url: string) {
 }
 
 function getSearchUrl(query: string, filters?: Record<string, string>) {
-  let url = `${searchResultsPrefix}/${query}/`;
+  let url = `${searchResultsPrefix}/${encodeURIComponent(query)}/`;
   if (filters && Object.keys(filters).length !== 0) {
     url = `${url}?${new URLSearchParams(filters).toString()}`;
   }
@@ -75,7 +75,7 @@ export async function searchKakaku(query: Query): Promise<SearchResultPage> {
   // console.log(url);
   const response = await fetchProxy(url);
   // console.log(response);
-  if (!response.ok || !response.text) {
+  if (!response.text) {
     return {
       ...emptyResultPage,
       query,
