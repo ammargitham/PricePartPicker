@@ -69,15 +69,14 @@ export function addKakakuColumns(
   if (options?.pppHidden) {
     partPickerPriceCell.style.display = 'none';
   }
-  const kakakuHeaderPriceCell = document.createElement('th');
-  kakakuHeaderPriceCell.dataset.kakaku = 'true';
-  const kakakuDotCom = browser.i18n.getMessage('kakaku_com');
-  const priceIntlStr = browser.i18n.getMessage('Price');
-  kakakuHeaderPriceCell.innerHTML = `${kakakuDotCom}<br>${priceIntlStr}`;
-  kakakuHeaderPriceCell.style.paddingRight = '1rem';
-  kakakuHeaderPriceCell.style.minWidth = '9rem';
-  // headerRow.insertBefore(kakakuHeaderPriceCell, partPickerPriceCell);
+  const kakakuHeaderPriceCell = createKakakuPriceHeaderCell();
   insertAfter(kakakuHeaderPriceCell, partPickerPriceCell);
+
+  if (!headerRow.querySelector('th.th__where')) {
+    // add where column for saved parts list table
+    const whereHeaderCell = createWhereHeaderCell();
+    insertAfter(whereHeaderCell, kakakuHeaderPriceCell);
+  }
 
   // fix buy col width
   const buyHeader: HTMLTableCellElement | null =
@@ -102,12 +101,7 @@ export function addKakakuColumns(
   if (options?.pppHidden) {
     priceCell.style.display = 'none';
   }
-  const kakakuTotalPriceCell = document.createElement('td');
-  kakakuTotalPriceCell.dataset.kakaku = 'true';
-  kakakuTotalPriceCell.style.fontSize = '1.25rem';
-  kakakuTotalPriceCell.style.fontWeight = '700';
-  kakakuTotalPriceCell.textContent = '¥0';
-  // kakakuTotalPriceCell = totalRow.insertBefore(kakakuTotalPriceCell, priceCell);
+  const kakakuTotalPriceCell = createTotalPriceCell();
   insertAfter(kakakuTotalPriceCell, priceCell);
 
   const rows: NodeListOf<HTMLTableRowElement> = partListTable.querySelectorAll(
@@ -136,22 +130,22 @@ export function addKakakuColumns(
     if (options?.pppHidden) {
       priceCell.style.display = 'none';
     }
-    const kakakuPriceCell = document.createElement('td');
-    kakakuPriceCell.dataset.kakaku = 'true';
-    kakakuPriceCell.textContent = '';
-    // kakakuPriceCell = row.insertBefore(kakakuPriceCell, priceCell);
+    const kakakuPriceCell = createPriceCell();
     insertAfter(kakakuPriceCell, priceCell);
 
-    // get name cell
+    let whereCell: HTMLTableCellElement | null =
+      row.querySelector('td.td__where');
+    if (!whereCell) {
+      whereCell = createWhereCell();
+      insertAfter(whereCell, kakakuPriceCell);
+    }
+
     const nameCell: HTMLTableCellElement | null =
       row.querySelector('td.td__name');
 
     const buyButton: HTMLAnchorElement | null = row.querySelector(
       'td.td__buy > a.button',
     );
-
-    const whereCell: HTMLTableCellElement | null =
-      row.querySelector('td.td__where');
 
     const part = parts[i];
     if (!part) {
@@ -209,6 +203,52 @@ export function addKakakuColumns(
   }
 
   partListTable.dataset.kakaku = 'true';
+}
+
+function createKakakuPriceHeaderCell() {
+  const kakakuHeaderPriceCell = document.createElement('th');
+  kakakuHeaderPriceCell.dataset.kakaku = 'true';
+  const kakakuDotCom = browser.i18n.getMessage('kakaku_com');
+  const priceIntlStr = browser.i18n.getMessage('Price');
+  kakakuHeaderPriceCell.innerHTML = `${kakakuDotCom}<br>${priceIntlStr}`;
+  kakakuHeaderPriceCell.style.paddingRight = '1rem';
+  kakakuHeaderPriceCell.style.minWidth = '9rem';
+  return kakakuHeaderPriceCell;
+}
+
+function createWhereHeaderCell() {
+  const whereHeaderCell = document.createElement('th');
+  whereHeaderCell.dataset.kakaku = 'true';
+  whereHeaderCell.textContent = browser.i18n.getMessage('where');
+  whereHeaderCell.classList.add('th__where');
+  return whereHeaderCell;
+}
+
+function createTotalPriceCell() {
+  const kakakuTotalPriceCell = document.createElement('td');
+  kakakuTotalPriceCell.dataset.kakaku = 'true';
+  kakakuTotalPriceCell.style.fontSize = '1.25rem';
+  kakakuTotalPriceCell.style.fontWeight = '700';
+  kakakuTotalPriceCell.textContent = '¥0';
+  return kakakuTotalPriceCell;
+}
+
+function createPriceCell() {
+  const kakakuPriceCell = document.createElement('td');
+  kakakuPriceCell.dataset.kakaku = 'true';
+  kakakuPriceCell.textContent = '';
+  return kakakuPriceCell;
+}
+
+function createWhereCell() {
+  const whereCell = document.createElement('td');
+  whereCell.dataset.kakaku = 'true';
+  whereCell.classList.add('td__where', 'td--empty');
+  const hiddenLabel = document.createElement('h6');
+  hiddenLabel.classList.add('xs-block', 'md-hide');
+  hiddenLabel.textContent = 'Where';
+  whereCell.appendChild(hiddenLabel);
+  return whereCell;
 }
 
 function updateName(nameCell: HTMLTableCellElement, item?: KakakuItem) {
@@ -333,6 +373,7 @@ function updateWhere(
   link.href = item.shop.itemUrl || '';
   link.textContent = item.shop.name || '';
   link.style.width = 'auto';
+  link.style.whiteSpace = 'nowrap';
   whereCell.classList.remove('td--empty');
   whereCell.appendChild(link);
 }
