@@ -526,10 +526,14 @@ function parsePartRow(tr: HTMLTableRowElement): Part | undefined {
     }
   }
   const nameCell = tr.querySelector('td.td__name');
-  if (!nameCell || !nameCell.textContent) {
+  if (!nameCell) {
     return;
   }
-  const nameHref = nameCell?.querySelector('a')?.href;
+  const nameAnchorEle = nameCell?.querySelector('a');
+  if (!nameAnchorEle || !nameAnchorEle.textContent) {
+    return;
+  }
+  const nameHref = nameAnchorEle?.href;
   let partPickerId: string | undefined;
   if (nameHref) {
     const partPath = new URL(nameHref).pathname;
@@ -546,7 +550,7 @@ function parsePartRow(tr: HTMLTableRowElement): Part | undefined {
     partPickerId,
     type,
     typeName: typeCell?.textContent?.trim(),
-    name: nameCell.textContent.trim(),
+    name: nameAnchorEle.textContent.trim(),
     imgUrl,
   };
   return part;
