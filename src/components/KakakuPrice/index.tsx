@@ -1,11 +1,10 @@
 import React, { useEffect, useState } from 'react';
 
-import { Dialog } from '@reach/dialog';
-
 import { addPartProxy } from '@src/dbHelper';
 import useKakakuSearch from '@src/hooks/useKakakuSearch';
 import { KakakuItem, Part } from '@src/types';
 
+import Dialog from '../Dialog';
 import KakakuPriceContent from './KakakuPriceContent';
 import SearchDialogContent from './SearchDialogContent';
 
@@ -44,7 +43,8 @@ export default function KakakuPrice({
       {showSearchDialog && (
         <Dialog
           className="w-[70vw] max-w-[1200px]"
-          isOpen
+          open
+          hideCloseButton
           onDismiss={closeDialog}
         >
           <SearchDialogContent

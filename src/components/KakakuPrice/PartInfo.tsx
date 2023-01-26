@@ -50,7 +50,7 @@ export default function PartInfo({
         type="button"
         className="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900
         rounded-lg text-sm p-1.5 ml-auto inline-flex items-center dark:hover:bg-gray-600
-        dark:hover:text-white"
+        dark:hover:text-white focus:outline-none"
         onClick={onClose}
       >
         <XMarkIcon className="h-4 w-4 tw-block" />

@@ -93,7 +93,7 @@
     },
     "dependencies": {
         "@heroicons/react": "^2.0.13",
-        "@reach/dialog": "^0.18.0",
+        "@radix-ui/react-dialog": "^1.0.2",
         "@reach/listbox": "^0.18.0",
         "@reach/portal": "^0.18.0",
         "@reach/tooltip": "^0.18.0",
