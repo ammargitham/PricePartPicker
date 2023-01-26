@@ -115,51 +115,50 @@ export default function SearchDialogContent({
                   ) : null}
                 </div>
                 <Tooltip
-                  label={browser.i18n.getMessage('use_query_tooltip')}
-                  aria-label={browser.i18n.getMessage('use_query_tooltip')}
-                  className="z-[999]"
-                  arrowClassName="z-[1000]"
-                >
-                  {/* TODO: refactor below button into a component */}
-                  <button
-                    type="button"
-                    className={`flex flex-row items-center px-4 py-2 text-sm font-medium
-                  rounded-lg
-                  ${isCurrentQueryUsed ? 'cursor-default' : null}
-                  ${isCurrentQueryUsed ? 'text-gray-900' : 'text-white'}
-                  ${
-                    isCurrentQueryUsed
-                      ? 'bg-green-400'
-                      : 'bg-green-700 hover:bg-green-800'
+                  content={browser.i18n.getMessage('use_query_tooltip')}
+                  trigger={
+                    // TODO: refactor below button into a component
+                    <button
+                      type="button"
+                      className={`flex flex-row items-center px-4 py-2 text-sm font-medium
+                        rounded-lg
+                        ${isCurrentQueryUsed ? 'cursor-default' : null}
+                        ${isCurrentQueryUsed ? 'text-gray-900' : 'text-white'}
+                        ${
+                          isCurrentQueryUsed
+                            ? 'bg-green-400'
+                            : 'bg-green-700 hover:bg-green-800'
+                        }
+                        ${
+                          isCurrentQueryUsed
+                            ? 'dark:bg-green-500'
+                            : 'dark:bg-green-600 dark:hover:bg-green-700'
+                        }
+                        focus:outline-none focus:ring-4 focus:ring-green-300 dark:focus:ring-green-800
+                      `}
+                      onClick={() => {
+                        if (isCurrentQueryUsed) {
+                          return;
+                        }
+                        onUseQueryClick?.(resultPage);
+                      }}
+                    >
+                      {isCurrentQueryUsed ? (
+                        <CheckIcon className="mr-2 -ml w-4 h-4" />
+                      ) : null}
+                      <span>
+                        {browser.i18n.getMessage(
+                          isCurrentQueryUsed
+                            ? 'using_current_query'
+                            : 'use_current_query',
+                        )}
+                      </span>
+                      {!isCurrentQueryUsed ? (
+                        <InformationCircleIcon className="ml-2 -mr-1 w-5 h-5" />
+                      ) : null}
+                    </button>
                   }
-                  ${
-                    isCurrentQueryUsed
-                      ? 'dark:bg-green-500'
-                      : 'dark:bg-green-600 dark:hover:bg-green-700'
-                  }
-                  focus:outline-none focus:ring-4 focus:ring-green-300 dark:focus:ring-green-800`}
-                    onClick={() => {
-                      if (isCurrentQueryUsed) {
-                        return;
-                      }
-                      onUseQueryClick?.(resultPage);
-                    }}
-                  >
-                    {isCurrentQueryUsed ? (
-                      <CheckIcon className="mr-2 -ml w-4 h-4" />
-                    ) : null}
-                    <span>
-                      {browser.i18n.getMessage(
-                        isCurrentQueryUsed
-                          ? 'using_current_query'
-                          : 'use_current_query',
-                      )}
-                    </span>
-                    {!isCurrentQueryUsed ? (
-                      <InformationCircleIcon className="ml-2 -mr-1 w-5 h-5" />
-                    ) : null}
-                  </button>
-                </Tooltip>
+                />
                 <div className="flex flex-row items-center gap-2 text-gray-900 dark:text-white">
                   {browser.i18n.getMessage('sort')}:
                   <select

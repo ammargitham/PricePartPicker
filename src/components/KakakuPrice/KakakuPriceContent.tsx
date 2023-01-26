@@ -42,14 +42,12 @@ export default function KakakuPriceContent({
               : browser.i18n.getMessage('no_price')}
           </span>
           <Tooltip
-            className="px-0 py-0 max-w-[30rem] text-sm font-light border-t-white dark:border-t-white"
-            arrowClassName="!z-[1] before:!bg-white after:!bg-white
-            before:!border-white after:!border-white dark:before:!border-white
-            dark:after:!border-white"
-            label={<KakakuItemTooltipContent kakakuItem={kakakuItem} />}
-          >
-            <InformationCircleIcon className="w-5 h-5 tw-block text-gray-600 dark:text-slate-500 cursor-pointer" />
-          </Tooltip>
+            content={<KakakuItemTooltipContent kakakuItem={kakakuItem} />}
+            trigger={
+              <InformationCircleIcon className="w-5 h-5 tw-block text-gray-600 dark:text-slate-500 cursor-pointer" />
+            }
+            removePadding
+          />
           <PencilSquareIcon
             className="ml-2 -translate-y-[1px] w-5 h-5 text-gray-600 dark:text-slate-500 cursor-pointer"
             onClick={onEditClick}

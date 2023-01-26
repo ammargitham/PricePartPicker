@@ -15,7 +15,7 @@ export default function KakakuItemTooltipContent({
   kakakuItem,
 }: KakakuItemTooltipContentProps): JSX.Element {
   return (
-    <div className="w-full rounded-t-lg">
+    <div className="w-full rounded-t-lg translate-y-[1px]">
       {kakakuItem.imgUrl && (
         <a
           className="tw-block p-2 rounded-t-lg bg-white -translate-y-[1px]"

@@ -4,6 +4,7 @@
   "scss.lint.unknownAtRules": "ignore",
   "cSpell.words": [
     "clkrank",
+    "clsx",
     "colspans",
     "Conbini",
     "cssnano",
