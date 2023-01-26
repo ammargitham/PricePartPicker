@@ -321,11 +321,14 @@ function updateBuyButton(buyButton: HTMLAnchorElement, item?: KakakuItem) {
   }
   buyButton.target = '_blank';
   buyButton.rel = 'noopener noreferrer';
-  buyButton.href = (item.shop && item.shop.itemUrl) || item.itemUrl;
+  buyButton.href =
+    (item.shops && item.shops.length && item.shops[0].itemUrl) || item.itemUrl;
   const firstChild = buyButton.firstChild;
   if (firstChild) {
     firstChild.textContent = browser.i18n.getMessage(
-      item.shop && item.shop.itemUrl ? 'go_to_shop_page' : 'go_to_product_page',
+      item.shops && item.shops.length && item.shops[0].itemUrl
+        ? 'go_to_shop_page'
+        : 'go_to_product_page',
     );
   }
   buyButton.classList.remove('button--disabled');
@@ -352,7 +355,7 @@ function updateWhere(
     originalLink.style.display = 'none';
   }
 
-  if (!item || !item.shop) {
+  if (!item || !item.shops || !item.shops.length) {
     if (!pppHidden) {
       // un-hide any other link
       const originalLink = whereCell.querySelector('a');
@@ -370,8 +373,8 @@ function updateWhere(
   link.dataset['kakaku'] = 'true';
   link.target = '_blank';
   link.rel = 'noopener noreferrer';
-  link.href = item.shop.itemUrl || '';
-  link.textContent = item.shop.name || '';
+  link.href = item.shops[0].itemUrl || '';
+  link.textContent = item.shops[0].name || '';
   link.style.width = 'auto';
   link.style.whiteSpace = 'nowrap';
   whereCell.classList.remove('td--empty');

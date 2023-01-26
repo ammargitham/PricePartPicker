@@ -108,8 +108,13 @@ module.exports = {
       },
       // Treat src/css/app.css as a global stylesheet
       {
-        test: /\app.css$/,
-        use: [MiniCssExtractPlugin.loader, 'css-loader', 'postcss-loader'],
+        test: /\app.scss$/,
+        use: [
+          MiniCssExtractPlugin.loader,
+          'css-loader',
+          'postcss-loader',
+          'sass-loader',
+        ],
       },
       // Load .module.css files as CSS modules
       {

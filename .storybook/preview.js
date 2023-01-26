@@ -1,4 +1,4 @@
-import "../src/css/app.css";
+import "../src/css/app.scss";
 import "../src/css/site.css";
 
 export const parameters = {

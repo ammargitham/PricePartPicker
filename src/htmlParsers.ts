@@ -617,7 +617,7 @@ export function parseKakakuItemResponse(
   // console.log('price', price);
   const priceTable: HTMLTableElement | null =
     root.querySelector('table.p-priceTable');
-  const shop = parseShopFromPriceTable(priceTable);
+  const shops = parseShopsFromPriceTable(priceTable);
   return {
     itemUrl,
     kakakuId,
@@ -627,50 +627,172 @@ export function parseKakakuItemResponse(
     maker,
     releaseDate,
     itemDetails,
-    shop,
+    shops,
     rating: itemRating,
   };
 }
 
-function parseShopFromPriceTable(
+function parseShopsFromPriceTable(
   priceTable?: HTMLTableElement | null,
-): KakakuItemShop | undefined {
+): KakakuItemShop[] {
   if (!priceTable) {
-    return;
+    return [];
   }
-  const rows = priceTable.rows;
-  if (rows.length < 3) {
-    // need at least 3 rows
-    return;
+  const shops: KakakuItemShop[] = [];
+  for (const row of priceTable.rows) {
+    const shop = parseShopRow(row);
+    if (shop) {
+      shops.push(shop);
+    }
   }
-  const cheapestStoreRow = rows[2];
-  const cells = cheapestStoreRow.cells;
+  // console.log(shops);
+  return shops;
+}
+
+function parseShopRow(row: HTMLTableRowElement): KakakuItemShop | undefined {
+  const cells = row.cells;
   if (cells.length < 5) {
     return;
   }
-  const cheapestStoreCell = cells[4];
-  const shopName = cheapestStoreCell
-    .querySelector('a.p-PTShopData_name_link')
+  if (cells[0].tagName.toLowerCase() === 'th') {
+    return;
+  }
+  const priceStr = cells[1]
+    .querySelector('p.p-PTPrice_price')
     ?.textContent?.trim();
-  // console.log(shopName);
-  let shopArea = cheapestStoreCell
+  const price = priceStr ? parsePrice(priceStr) : undefined;
+
+  const storeCell = cells[4];
+
+  const shopNameAnchor = storeCell.querySelector(
+    'p.p-PTShopData_name > a.p-PTShopData_name_link',
+  ) as HTMLAnchorElement | undefined;
+  const shopLink = shopNameAnchor?.href;
+  if (!shopLink) {
+    return;
+  }
+  const id = getShopId(shopLink);
+  if (isNaN(id)) {
+    return;
+  }
+  const shopName = shopNameAnchor?.textContent?.trim();
+
+  // const shopNameIcon = (
+  //   storeCell.querySelector(
+  //     'a.p-PTShopData_name_link > img.p-PTShopData_name_link_icon',
+  //   ) as HTMLImageElement | null
+  // )?.src;
+
+  let shopArea = storeCell
     .querySelector('span.p-PTShopData_name_area')
     ?.textContent?.trim();
   if (shopArea && shopArea.startsWith('(') && shopArea.endsWith(')')) {
     shopArea = shopArea.substring(1, shopArea.length - 1);
   }
+
+  // const yearsStr = storeCell
+  //   .querySelector('p.p-PTShopData_year > button.p-PTShopData_year_btn')
+  //   ?.textContent?.trim();
+  // let years: number | undefined;
+  // if (yearsStr) {
+  //   years = parseInt(yearsStr, 10);
+  //   if (isNaN(years)) {
+  //     years = undefined;
+  //   }
+  // }
+
+  // const rankStr = storeCell
+  //   .querySelector('p.p-PTShopData_rank > button.p-PTShopData_rank_btn')
+  //   ?.textContent?.trim();
+  // let rank: number | undefined;
+  // if (rankStr && rankStr.startsWith('TOP')) {
+  //   rank = parseInt(rankStr.substring(3), 10);
+  //   if (isNaN(rank)) {
+  //     rank = undefined;
+  //   }
+  // }
+
+  // const paymentMethods = parsePaymentMethods(storeCell);
+
   // console.log(shopArea);
-  const shopItemLinkEle: HTMLAnchorElement | null =
-    cheapestStoreCell.querySelector(
-      'div.p-PTShop_btn a.p-PTShopData_name_link',
-    );
+  const shopItemLinkEle: HTMLAnchorElement | null = storeCell.querySelector(
+    'div.p-PTShop_btn a.p-PTShopData_name_link',
+  );
   const shopItemUrl = shopItemLinkEle?.href?.trim();
   // console.log(shopItemPageUrl);
   return {
+    id,
     name: shopName,
+    // nameIconUrl: shopNameIcon,
+    shopArea,
     itemUrl: shopItemUrl,
+    price,
+    // years,
+    // rank,
+    // paymentMethods,
   };
 }
+
+function getShopId(shopLink: string) {
+  const shopUrl = new URL(shopLink);
+  const pathname = shopUrl.pathname;
+  const splits = pathname.split('/');
+  return parseInt(splits[2], 10);
+}
+
+// function parsePaymentMethods(cell: HTMLTableCellElement): PaymentMethods {
+//   const allPaymentsSpans: NodeListOf<HTMLSpanElement> = cell.querySelectorAll(
+//     'div.p-PTPay_option_cont2 > span.p-PTPayCont',
+//   );
+//   const paymentMethods: PaymentMethods = {};
+//   allPaymentsSpans.forEach((span) => {
+//     const { classList } = span;
+//     if (!classList.contains('is-on')) {
+//       return;
+//     }
+//     if (classList.contains('p-PTPayCont-card')) {
+//       paymentMethods.card = true;
+//       return;
+//     }
+//     if (classList.contains('p-PTPayCont-cash')) {
+//       paymentMethods.cash = true;
+//       return;
+//     }
+//     if (classList.contains('p-PTPayCont-transfer')) {
+//       paymentMethods.transfer = true;
+//       return;
+//     }
+//     if (classList.contains('p-PTPayCont-cvs')) {
+//       paymentMethods.cvs = true;
+//       return;
+//     }
+//     if (classList.contains('p-PTPayCont-kakakuPay-card')) {
+//       if (paymentMethods.kakakuPay) {
+//         paymentMethods.kakakuPay.card = true;
+//       } else {
+//         paymentMethods.kakakuPay = { card: true };
+//       }
+//       return;
+//     }
+//     if (classList.contains('p-PTPayCont-kakakuPay-transfer')) {
+//       if (paymentMethods.kakakuPay) {
+//         paymentMethods.kakakuPay.transfer = true;
+//       } else {
+//         paymentMethods.kakakuPay = { transfer: true };
+//       }
+//       return;
+//     }
+//     if (classList.contains('p-PTPayCont-kakakuPay-cvs')) {
+//       if (paymentMethods.kakakuPay) {
+//         paymentMethods.kakakuPay.cvs = true;
+//       } else {
+//         paymentMethods.kakakuPay = { cvs: true };
+//       }
+//       return;
+//     }
+//   });
+//   return paymentMethods;
+// }
 
 function parseKakakuItemRating(
   productInfoEle: Element,

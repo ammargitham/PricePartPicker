@@ -20,9 +20,28 @@ export interface ReleaseDate {
   day: number;
 }
 
+export interface PaymentMethods {
+  card?: boolean;
+  cash?: boolean;
+  transfer?: boolean;
+  cvs?: boolean;
+  kakakuPay?: {
+    card?: boolean;
+    transfer?: boolean;
+    cvs?: boolean;
+  };
+}
+
 export interface KakakuItemShop {
+  id: number;
   name?: string;
+  // nameIconUrl?: string;
+  shopArea?: string;
   itemUrl?: string;
+  price?: number;
+  // years?: number;
+  // rank?: number;
+  // paymentMethods?: PaymentMethods;
 }
 
 export type RatingType = 0 | 0.5 | 1 | 1.5 | 2 | 2.5 | 3 | 3.5 | 4 | 4.5 | 5;
@@ -42,7 +61,7 @@ export interface KakakuItem {
   itemUrl: string;
   releaseDate?: ReleaseDate;
   itemDetails?: string[];
-  shop?: KakakuItemShop;
+  shops?: KakakuItemShop[];
   rating?: KakakuItemRating;
 }
 

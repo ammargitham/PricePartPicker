@@ -63,13 +63,15 @@ export default function KakakuItemTooltipContent({
               ? `¥${kakakuItem.price.toLocaleString('ja-JP')}`
               : 'No price information'}
           </span>
-          {kakakuItem.shop && kakakuItem.shop.name ? (
+          {kakakuItem.shops &&
+          kakakuItem.shops.length &&
+          kakakuItem.shops[0].name ? (
             <span className="text-sm text-gray-400 ml-4">
               <span className="font-light ">
                 {browser.i18n.getMessage('sold_by')}
               </span>
               <span className="ml-1 text-gray-900 dark:text-white">
-                {kakakuItem.shop.name}
+                {kakakuItem.shops[0].name}
               </span>
             </span>
           ) : null}

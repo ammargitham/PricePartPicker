@@ -2,7 +2,7 @@ import { AllowedPath, allowedPathsRegexMap } from './constants';
 import onListPageLoaded from './onListPageLoaded';
 import onSavePageLoaded from './onSavePageLoaded';
 
-import './css/app.css';
+import './css/app.scss';
 
 function updateThemeClasses(htmlEle: HTMLElement) {
   const classList = htmlEle.classList;

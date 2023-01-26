@@ -27,11 +27,14 @@ const kakakuItem: KakakuItem = {
     'B550チップセット搭載のゲーミングMini-ITXマザーボード（ソケットAM4）。Ryzen 5000シリーズに対応する。',
     'test2',
   ],
-  shop: {
-    name: 'モバイル一番',
-    itemUrl:
-      'https://c.kakaku.com/forwarder/forward.aspx?ShopCD=3172&PrdKey=K0001299539&Url=http%3A%2F%2Fmobileshop%2Eshop28%2Emakeshop%2Ejp%2Fview%2Fitem%2F000000001416&Hash=75764bd35270d26904b0b591e255d07e',
-  },
+  shops: [
+    {
+      id: 1,
+      name: 'モバイル一番',
+      itemUrl:
+        'https://c.kakaku.com/forwarder/forward.aspx?ShopCD=3172&PrdKey=K0001299539&Url=http%3A%2F%2Fmobileshop%2Eshop28%2Emakeshop%2Ejp%2Fview%2Fitem%2F000000001416&Hash=75764bd35270d26904b0b591e255d07e',
+    },
+  ],
   rating: {
     rating: 3.5,
     ratingText: '3.5',
