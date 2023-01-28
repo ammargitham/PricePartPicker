@@ -1,5 +1,6 @@
 import React from 'react';
 
+import clsx from 'clsx';
 import browser from 'webextension-polyfill';
 
 import { KakakuItemShop } from '@src/types';
@@ -53,8 +54,18 @@ function KakakuItemShopListItem({
     <div
       // hover:bg-gray-200 dark:hover:bg-gray-600 dark:hover:text-white
       // px-4 py-2
-      className="inline-flex flex-row gap-4 items-center w-full min-w-[12rem]
-      text-sm text-black dark:text-white"
+      className={clsx([
+        'inline-flex',
+        'flex-row',
+        'gap-10',
+        'items-center',
+        'justify-between',
+        'w-full',
+        'min-w-[12rem]',
+        'text-sm',
+        'text-black',
+        'dark:text-white',
+      ])}
     >
       <div className="flex flex-col gap-3">
         <div className="flex flex-row gap-2 items-center">

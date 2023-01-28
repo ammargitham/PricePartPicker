@@ -94,8 +94,8 @@
     "dependencies": {
         "@heroicons/react": "^2.0.13",
         "@radix-ui/react-dialog": "^1.0.2",
+        "@radix-ui/react-select": "^1.2.0",
         "@radix-ui/react-tooltip": "^1.0.3",
-        "@reach/listbox": "^0.18.0",
         "clsx": "^1.2.1",
         "deep-equal": "^2.1.0",
         "dexie": "^3.2.2",

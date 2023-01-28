@@ -2,7 +2,7 @@ import React, { useMemo } from 'react';
 
 import { KakakuItemShop } from '@src/types';
 
-import ListBox, { ListOption } from '../ListBox';
+import Select, { Option } from '../Select';
 import KakakuItemShopListItem from './KakakuItemShopListItem';
 
 interface KakakuItemShopSelectProps {
@@ -16,21 +16,22 @@ function KakakuItemShopSelect({
   value,
   onChange,
 }: KakakuItemShopSelectProps): JSX.Element {
-  const shopOptions: ListOption[] = useMemo(() => {
+  const shopOptions: Option[] = useMemo(() => {
     if (!shops) {
       return [];
     }
-    return shops.map((shop): ListOption => {
+    return shops.map((shop): Option => {
       return {
         key: shop.id,
         value: shop.id.toString(),
+        text: shop.name || '',
         content: <KakakuItemShopListItem shop={shop} />,
       };
     });
   }, [shops]);
 
   return (
-    <ListBox
+    <Select
       placeholder="Choose a store"
       value={value?.toString()}
       options={shopOptions}
