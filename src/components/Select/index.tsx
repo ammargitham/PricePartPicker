@@ -74,11 +74,19 @@ export default function Select({
           'dark:focus:border-blue-500',
         ])}
       >
-        <Value placeholder={placeholder}>
-          {selectedOption
-            ? selectedOption.text || selectedOption.content
-            : null}
-        </Value>
+        <span
+          className={clsx([
+            'overflow-hidden',
+            'text-clip',
+            'whitespace-nowrap',
+          ])}
+        >
+          <Value placeholder={placeholder}>
+            {selectedOption
+              ? selectedOption.text || selectedOption.content
+              : null}
+          </Value>
+        </span>
         <Icon className={clsx(['text-gray-900', 'dark:text-gray-400'])}>
           <ChevronDownIcon className={clsx(['w-4', 'h-4', 'tw-block'])} />
         </Icon>
