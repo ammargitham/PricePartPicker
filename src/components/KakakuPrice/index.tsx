@@ -61,7 +61,7 @@ export default function KakakuPrice({
             }}
             onUseResultClick={(r) => {
               // console.log(r);
-              addPartProxy({ part, searchResult: r });
+              addPartProxy({ part, kakakuItem: r });
               closeDialog();
             }}
           />

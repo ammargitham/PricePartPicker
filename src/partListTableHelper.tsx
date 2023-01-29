@@ -4,6 +4,8 @@ import ReactDOM from 'react-dom';
 import browser from 'webextension-polyfill';
 
 import KakakuPrice from './components/KakakuPrice';
+import KakakuItemShopSelect from './components/KakakuPrice/KakakuItemShopSelect';
+import { addPartProxy } from './dbHelper';
 import { KakakuItem, Part } from './types';
 import { getFullName, htmlToElement, insertAfter } from './utils';
 
@@ -52,7 +54,7 @@ export function addKakakuColumns(
   // cells in the list page table
   const otherHeaderPriceCells: NodeListOf<HTMLTableCellElement> =
     headerRow.querySelectorAll(
-      'th.th__base, th.th__promo, th.th__shipping, th.th__tax, th.th__settings',
+      'th.th__base, th.th__promo, th.th__shipping, th.th__tax, th.th__settings, th.th__where',
     );
   otherHeaderPriceCells.forEach((cell) => {
     partPickerPriceCells?.push(cell);
@@ -72,11 +74,9 @@ export function addKakakuColumns(
   const kakakuHeaderPriceCell = createKakakuPriceHeaderCell();
   insertAfter(kakakuHeaderPriceCell, partPickerPriceCell);
 
-  if (!headerRow.querySelector('th.th__where')) {
-    // add where column for saved parts list table
-    const whereHeaderCell = createWhereHeaderCell();
-    insertAfter(whereHeaderCell, kakakuHeaderPriceCell);
-  }
+  // add where column for saved parts list table
+  const whereHeaderCell = createWhereHeaderCell();
+  insertAfter(whereHeaderCell, kakakuHeaderPriceCell);
 
   // fix buy col width
   const buyHeader: HTMLTableCellElement | null =
@@ -112,7 +112,7 @@ export function addKakakuColumns(
     // cells in the list page table
     const otherPriceCells: NodeListOf<HTMLTableCellElement> =
       row.querySelectorAll(
-        'td.td__base, td.td__promo, td.td__shipping, td.td__tax, td.td__settings',
+        'td.td__base, td.td__promo, td.td__shipping, td.td__tax, td.td__settings, td.td__where, td.td__locked',
       );
     otherPriceCells.forEach((cell) => {
       partPickerPriceCells?.push(cell);
@@ -133,12 +133,8 @@ export function addKakakuColumns(
     const kakakuPriceCell = createPriceCell();
     insertAfter(kakakuPriceCell, priceCell);
 
-    let whereCell: HTMLTableCellElement | null =
-      row.querySelector('td.td__where');
-    if (!whereCell) {
-      whereCell = createWhereCell();
-      insertAfter(whereCell, kakakuPriceCell);
-    }
+    const whereCell = createWhereCell();
+    insertAfter(whereCell, kakakuPriceCell);
 
     const nameCell: HTMLTableCellElement | null =
       row.querySelector('td.td__name');
@@ -163,13 +159,17 @@ export function addKakakuColumns(
           if (buyButton) {
             updateBuyButton(buyButton, item);
           }
-          if (whereCell) {
-            updateWhere(
-              whereCell,
-              item,
-              options?.pppHidden as boolean | undefined,
-            );
-          }
+          updateWhere(whereCell, item, (id) => {
+            if (!item) {
+              return;
+            }
+            const clonedItem = item.clone();
+            clonedItem.selectedShopId = id;
+            addPartProxy({
+              part,
+              kakakuItem: clonedItem,
+            });
+          });
         }}
       />,
       kakakuPriceCell,
@@ -219,8 +219,11 @@ function createKakakuPriceHeaderCell() {
 function createWhereHeaderCell() {
   const whereHeaderCell = document.createElement('th');
   whereHeaderCell.dataset.kakaku = 'true';
-  whereHeaderCell.textContent = browser.i18n.getMessage('where');
-  whereHeaderCell.classList.add('th__where');
+  const kakakuDotCom = browser.i18n.getMessage('kakaku_com');
+  const whereStr = browser.i18n.getMessage('where');
+  whereHeaderCell.innerHTML = `${kakakuDotCom}<br>${whereStr}`;
+  whereHeaderCell.style.paddingRight = '1rem';
+  whereHeaderCell.style.minWidth = '9rem';
   return whereHeaderCell;
 }
 
@@ -243,11 +246,7 @@ function createPriceCell() {
 function createWhereCell() {
   const whereCell = document.createElement('td');
   whereCell.dataset.kakaku = 'true';
-  whereCell.classList.add('td__where', 'td--empty');
-  const hiddenLabel = document.createElement('h6');
-  hiddenLabel.classList.add('xs-block', 'md-hide');
-  hiddenLabel.textContent = 'Where';
-  whereCell.appendChild(hiddenLabel);
+  ReactDOM.render(<KakakuItemShopSelect />, whereCell);
   return whereCell;
 }
 
@@ -319,16 +318,16 @@ function updateBuyButton(buyButton: HTMLAnchorElement, item?: KakakuItem) {
     }
     return;
   }
+  const shopUrl = item.shops?.find(
+    (s) => s.id === item.selectedShopId,
+  )?.itemUrl;
   buyButton.target = '_blank';
   buyButton.rel = 'noopener noreferrer';
-  buyButton.href =
-    (item.shops && item.shops.length && item.shops[0].itemUrl) || item.itemUrl;
+  buyButton.href = shopUrl || item.itemUrl;
   const firstChild = buyButton.firstChild;
   if (firstChild) {
     firstChild.textContent = browser.i18n.getMessage(
-      item.shops && item.shops.length && item.shops[0].itemUrl
-        ? 'go_to_shop_page'
-        : 'go_to_product_page',
+      shopUrl ? 'go_to_shop_page' : 'go_to_product_page',
     );
   }
   buyButton.classList.remove('button--disabled');
@@ -343,40 +342,14 @@ function updateBuyButton(buyButton: HTMLAnchorElement, item?: KakakuItem) {
 function updateWhere(
   whereCell: HTMLTableCellElement,
   item?: KakakuItem,
-  pppHidden?: boolean,
+  onChange?: (id: number) => void,
 ) {
-  // remove any kakaku link previously present
-  const kakakuLink = whereCell.querySelector('a[data-kakaku="true"]');
-  kakakuLink?.remove();
-
-  // hide any link already present
-  const originalLink = whereCell.querySelector('a');
-  if (originalLink) {
-    originalLink.style.display = 'none';
-  }
-
-  if (!item || !item.shops || !item.shops.length) {
-    if (!pppHidden) {
-      // un-hide any other link
-      const originalLink = whereCell.querySelector('a');
-      if (originalLink) {
-        originalLink.style.display = 'block';
-        return;
-      }
-    }
-    // add td--empty class
-    whereCell.classList.add('td--empty');
-    return;
-  }
-  // add our kakaku link
-  const link = document.createElement('a');
-  link.dataset['kakaku'] = 'true';
-  link.target = '_blank';
-  link.rel = 'noopener noreferrer';
-  link.href = item.shops[0].itemUrl || '';
-  link.textContent = item.shops[0].name || '';
-  link.style.width = 'auto';
-  link.style.whiteSpace = 'nowrap';
-  whereCell.classList.remove('td--empty');
-  whereCell.appendChild(link);
+  ReactDOM.render(
+    <KakakuItemShopSelect
+      shops={item?.shops}
+      value={item?.selectedShopId}
+      onChange={onChange}
+    />,
+    whereCell,
+  );
 }

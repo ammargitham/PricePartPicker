@@ -1,3 +1,5 @@
+import cloneDeep from 'lodash/cloneDeep';
+
 import { Event } from './constants';
 
 export interface Part {
@@ -52,17 +54,71 @@ export interface KakakuItemRating {
   numReviews?: number;
 }
 
-export interface KakakuItem {
+export class KakakuItem {
   kakakuId: string;
   name: string;
   maker?: string;
-  price?: number;
+  private _price?: number;
   imgUrl?: string;
   itemUrl: string;
   releaseDate?: ReleaseDate;
   itemDetails?: string[];
-  shops?: KakakuItemShop[];
   rating?: KakakuItemRating;
+  shops?: KakakuItemShop[];
+  selectedShopId?: number;
+
+  constructor(
+    kakakuId: string,
+    name: string,
+    maker: string | undefined,
+    price: number | undefined,
+    imgUrl: string | undefined,
+    itemUrl: string,
+    releaseDate?: ReleaseDate,
+    itemDetails?: string[],
+    rating?: KakakuItemRating,
+    shops?: KakakuItemShop[],
+    selectedShopId?: number,
+  ) {
+    this.kakakuId = kakakuId;
+    this.name = name;
+    this.maker = maker;
+    this.price = price;
+    this.imgUrl = imgUrl;
+    this.itemUrl = itemUrl;
+    this.releaseDate = releaseDate;
+    this.itemDetails = itemDetails;
+    this.rating = rating;
+    this.shops = shops;
+    this.selectedShopId = selectedShopId;
+  }
+
+  get price(): number | undefined {
+    if (this.shops?.length && this.selectedShopId) {
+      return this.shops.find((s) => s.id === this.selectedShopId)?.price;
+    }
+    return this._price;
+  }
+
+  set price(price: number | undefined) {
+    this._price = price;
+  }
+
+  clone(): KakakuItem {
+    return new KakakuItem(
+      this.kakakuId,
+      this.name,
+      this.maker,
+      this.price,
+      this.imgUrl,
+      this.itemUrl,
+      cloneDeep(this.releaseDate),
+      cloneDeep(this.itemDetails),
+      cloneDeep(this.rating),
+      cloneDeep(this.shops),
+      this.selectedShopId,
+    );
+  }
 }
 
 export interface Query {

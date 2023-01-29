@@ -1,9 +1,10 @@
-import * as React from 'react';
+import React, { useState } from 'react';
 
 import { ComponentMeta } from '@storybook/react';
 
-import { KakakuItem } from '@src/types';
+import { KakakuItem, KakakuItemShop } from '@src/types';
 
+import KakakuItemShopSelect from '../KakakuItemShopSelect';
 import KakakuPriceContent from '../KakakuPriceContent';
 
 export default {
@@ -11,7 +12,12 @@ export default {
   component: KakakuPriceContent,
 } as ComponentMeta<typeof KakakuPriceContent>;
 
-const getPartPickerTable = (component: JSX.Element) => {
+const getPartPickerTable = (
+  component: JSX.Element,
+  shops?: KakakuItemShop[],
+  shopId?: number,
+  onShopIdChange?: (id: number) => void,
+) => {
   return (
     <div className="wrapper wrapper__pageContent">
       <div
@@ -38,7 +44,9 @@ const getPartPickerTable = (component: JSX.Element) => {
                         <br />
                         Price
                       </th>
-                      <th className="th__price">Price</th>
+                      <th data-kakaku="true" className="th__where">
+                        Where
+                      </th>
                       <th className="th__buy"></th>
                     </tr>
                   </thead>
@@ -66,8 +74,13 @@ const getPartPickerTable = (component: JSX.Element) => {
                         </a>
                       </td>
                       <td data-kakaku="true">{component}</td>
-                      <td className="td__price">
-                        <h6 className="xs-block md-hide">Price</h6>¥28480.00
+                      <td data-kakaku="true" className="td__where">
+                        <h6 className="xs-block md-hide">Where</h6>
+                        <KakakuItemShopSelect
+                          shops={shops}
+                          value={shopId}
+                          onChange={onShopIdChange}
+                        />
                       </td>
                       <td className="td__buy">
                         <a className="button button--small button--success button--disabled">
@@ -92,28 +105,51 @@ export const NoResults = (): JSX.Element =>
 export const Searching = (): JSX.Element =>
   getPartPickerTable(<KakakuPriceContent searching />);
 
-const kakakuItem: KakakuItem = {
-  itemUrl: 'https://kakaku.com/item/K0001299539/',
-  kakakuId: 'K0001299539',
-  name: 'Ryzen 5 5600X BOX',
-  price: 22979,
-  imgUrl: 'https://img1.kakaku.k-img.com/images/productimage/l/K0001299539.jpg',
-  maker: 'AMD',
-  releaseDate: {
+const kakakuItem = new KakakuItem(
+  'K0001299539',
+  'Ryzen 5 5600X BOX',
+  'AMD',
+  22979,
+  'https://img1.kakaku.k-img.com/images/productimage/l/K0001299539.jpg',
+  'https://kakaku.com/item/K0001299539/',
+  {
     year: 2020,
     month: 11,
     day: 6,
   },
-  itemDetails: ['test1', 'test2'],
-  shops: [
+  ['test1', 'test2'],
+  undefined,
+  [
     {
       id: 1,
       name: 'モバイル一番',
       itemUrl:
         'https://c.kakaku.com/forwarder/forward.aspx?ShopCD=3172&PrdKey=K0001299539&Url=http%3A%2F%2Fmobileshop%2Eshop28%2Emakeshop%2Ejp%2Fview%2Fitem%2F000000001416&Hash=75764bd35270d26904b0b591e255d07e',
+      price: 12000,
+    },
+    {
+      id: 2,
+      name: 'モバイル一番 123',
+      itemUrl:
+        'https://c.kakaku.com/forwarder/forward.aspx?ShopCD=3172&PrdKey=K0001299539&Url=http%3A%2F%2Fmobileshop%2Eshop28%2Emakeshop%2Ejp%2Fview%2Fitem%2F000000001416&Hash=75764bd35270d26904b0b591e255d07e',
+      price: 18000,
     },
   ],
-};
+  2,
+);
 
-export const WithItem = (): JSX.Element =>
-  getPartPickerTable(<KakakuPriceContent kakakuItem={kakakuItem} />);
+export const WithItem = (): JSX.Element => {
+  const [shopId, setShopId] = useState<number | undefined>(
+    kakakuItem.selectedShopId,
+  );
+
+  return getPartPickerTable(
+    <KakakuPriceContent kakakuItem={kakakuItem} />,
+    kakakuItem.shops,
+    shopId,
+    (v) => {
+      kakakuItem.selectedShopId = v;
+      setShopId(v);
+    },
+  );
+};

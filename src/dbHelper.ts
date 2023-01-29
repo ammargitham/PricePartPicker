@@ -10,13 +10,13 @@ export class AddOrUpdatePartEvent extends MessageEvent {
   event: Event = Event.ADD_PART_TO_DB;
   part: Part;
   query?: Query;
-  searchResult?: KakakuItem;
+  kakakuItem?: KakakuItem;
 
-  constructor(part: Part, query?: Query, searchResult?: KakakuItem) {
+  constructor(part: Part, query?: Query, kakakuItem?: KakakuItem) {
     super();
     this.part = part;
     this.query = query;
-    this.searchResult = searchResult;
+    this.kakakuItem = kakakuItem;
   }
 }
 
@@ -61,7 +61,7 @@ const partSubscriptions: Record<string, Subscription> = {};
 interface AddPartProxyProps {
   part: Part;
   query?: Query;
-  searchResult?: KakakuItem;
+  kakakuItem?: KakakuItem;
 }
 
 /**
@@ -73,12 +73,12 @@ interface AddPartProxyProps {
 export function addPartProxy({
   part,
   query,
-  searchResult,
+  kakakuItem,
 }: AddPartProxyProps): void {
-  if (!query && !searchResult) {
-    throw Error('query or searchResult expected');
+  if (!query && !kakakuItem) {
+    throw Error('query or kakakuItem expected');
   }
-  const event = new AddOrUpdatePartEvent(part, query, searchResult);
+  const event = new AddOrUpdatePartEvent(part, query, kakakuItem);
   const dbPort = browser.runtime.connect({ name: 'db' });
   dbPort.postMessage(event);
 }
@@ -102,7 +102,8 @@ export function setupDbPort(port: Port): void {
         addOrUpdatePart(
           addPartEvent.part.partPickerId,
           addPartEvent.query,
-          addPartEvent.searchResult?.kakakuId,
+          addPartEvent.kakakuItem?.kakakuId,
+          addPartEvent.kakakuItem?.selectedShopId,
         )
           .then(() => {
             // console.log(id);

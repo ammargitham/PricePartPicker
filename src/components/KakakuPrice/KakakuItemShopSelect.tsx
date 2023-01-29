@@ -12,7 +12,7 @@ interface KakakuItemShopSelectProps {
 }
 
 function KakakuItemShopSelect({
-  shops = [],
+  shops,
   value,
   onChange,
 }: KakakuItemShopSelectProps): JSX.Element {
@@ -32,9 +32,10 @@ function KakakuItemShopSelect({
 
   return (
     <Select
-      placeholder="Choose a store"
+      placeholder={shops?.length ? 'Choose a shop' : 'No shops'}
       value={value?.toString()}
       options={shopOptions}
+      disabled={!shops || !shops.length}
       onChange={(v) => onChange?.(parseInt(v, 10))}
     />
   );

@@ -43,11 +43,23 @@ export default function useKakakuSearch(part: Part): KakakuSearch {
   );
 
   const getKakakuItemById = useCallback(
-    (kakakuId: string, updateQuery?: boolean) => {
+    (
+      kakakuId: string,
+      updateQuery?: boolean,
+      selectedKakakuShopId?: number,
+    ) => {
       setSearching(true);
       getKakakuItem(kakakuId)
         .then((kakakuItem) => {
           // console.log('done', kakakuItem);
+          if (kakakuItem) {
+            // update selected shop id in kakaku item
+            if (selectedKakakuShopId) {
+              kakakuItem.selectedShopId = selectedKakakuShopId;
+            } else if (kakakuItem.shops?.length) {
+              kakakuItem.selectedShopId = kakakuItem.shops[0].id;
+            }
+          }
           setKakakuItem(kakakuItem);
           if (updateQuery) {
             setResultPage((prev) => {
@@ -72,7 +84,7 @@ export default function useKakakuSearch(part: Part): KakakuSearch {
   );
 
   const searchAndSetResult = useCallback(
-    (query: Query) => {
+    (query: Query, selectedKakakuShopId?: number) => {
       search(query, (result) => {
         // console.log('first result', result);
         if (!result) {
@@ -80,7 +92,7 @@ export default function useKakakuSearch(part: Part): KakakuSearch {
         }
         const { kakakuId } = result;
         // now search using kakakuId
-        getKakakuItemById(kakakuId);
+        getKakakuItemById(kakakuId, false, selectedKakakuShopId);
       });
     },
     [getKakakuItemById, search],
@@ -94,15 +106,15 @@ export default function useKakakuSearch(part: Part): KakakuSearch {
       return;
     }
     // search using dbPart info
-    const { kakakuId, query } = dbPart;
+    const { kakakuId, query, selectedKakakuShopId } = dbPart;
     if (kakakuId) {
       // search using kakaku id
-      getKakakuItemById(kakakuId, true);
+      getKakakuItemById(kakakuId, true, selectedKakakuShopId);
       return;
     }
     if (query) {
       // search using query and set result
-      searchAndSetResult(query);
+      searchAndSetResult(query, selectedKakakuShopId);
       return;
     }
   }, [dbPart, getKakakuItemById, part, searchAndSetResult]);

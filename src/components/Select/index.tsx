@@ -31,6 +31,7 @@ interface SelectProps {
   placeholder?: string;
   options: Option[];
   value?: RadixSelectProps['value'];
+  disabled?: boolean;
   onChange?: (value: string) => void;
 }
 
@@ -38,6 +39,7 @@ export default function Select({
   placeholder,
   options,
   value,
+  disabled,
   onChange,
 }: SelectProps): JSX.Element {
   const selectedOption = useMemo(
@@ -45,7 +47,7 @@ export default function Select({
     [options, value],
   );
   return (
-    <Root onValueChange={onChange}>
+    <Root value={value} disabled={disabled} onValueChange={onChange}>
       <Trigger
         className={clsx([
           'w-48',
@@ -97,6 +99,7 @@ export default function Select({
             'dark:text-white',
             'overflow-hidden',
             'shadow-md',
+            'z-[999]',
           ])}
         >
           <ScrollUpButton className="select-scroll-icon">

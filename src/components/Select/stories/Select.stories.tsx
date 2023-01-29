@@ -40,7 +40,7 @@ const tempRenderOptions = Array(10)
 const allTempOptions = tempOptions.concat(tempRenderOptions);
 
 export const Default = (): JSX.Element => {
-  const [selected, setSelected] = useState<string | undefined>();
+  const [selected, setSelected] = useState<string | undefined>('test-render-1');
   return (
     <div>
       <div className="h-[200px]"></div>
@@ -49,6 +49,19 @@ export const Default = (): JSX.Element => {
         options={allTempOptions}
         value={selected}
         onChange={setSelected}
+      />
+    </div>
+  );
+};
+
+export const Disabled = (): JSX.Element => {
+  return (
+    <div>
+      <div className="h-[200px]"></div>
+      <Select
+        placeholder="Select an option"
+        options={allTempOptions}
+        disabled
       />
     </div>
   );

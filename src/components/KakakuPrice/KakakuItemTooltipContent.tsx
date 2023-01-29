@@ -14,6 +14,9 @@ interface KakakuItemTooltipContentProps {
 export default function KakakuItemTooltipContent({
   kakakuItem,
 }: KakakuItemTooltipContentProps): JSX.Element {
+  const selectedShop = kakakuItem.selectedShopId
+    ? kakakuItem.shops?.find((s) => s.id === kakakuItem.selectedShopId)
+    : undefined;
   return (
     <div className="w-full rounded-t-lg translate-y-[1px]">
       {kakakuItem.imgUrl && (
@@ -63,15 +66,13 @@ export default function KakakuItemTooltipContent({
               ? `¥${kakakuItem.price.toLocaleString('ja-JP')}`
               : 'No price information'}
           </span>
-          {kakakuItem.shops &&
-          kakakuItem.shops.length &&
-          kakakuItem.shops[0].name ? (
+          {selectedShop ? (
             <span className="text-sm text-gray-400 ml-4">
               <span className="font-light ">
                 {browser.i18n.getMessage('sold_by')}
               </span>
               <span className="ml-1 text-gray-900 dark:text-white">
-                {kakakuItem.shops[0].name}
+                {selectedShop.name || ''}
               </span>
             </span>
           ) : null}

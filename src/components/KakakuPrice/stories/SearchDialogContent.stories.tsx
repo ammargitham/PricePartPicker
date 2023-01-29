@@ -3,7 +3,12 @@ import * as React from 'react';
 import { ComponentMeta } from '@storybook/react';
 
 import { emptyResultPage } from '@src/constants';
-import { Part, SearchResultPage } from '@src/types';
+import {
+  KakakuItem,
+  KakakuItemRating,
+  Part,
+  SearchResultPage,
+} from '@src/types';
 
 import SearchDialogContent from '../SearchDialogContent';
 
@@ -73,7 +78,7 @@ const testResultPage: SearchResultPage = {
         rating: 4,
         ratingText: '4',
         numReviews: 33,
-      },
+      } as KakakuItemRating,
     },
     {
       kakakuId: 'K0001410627',
@@ -275,7 +280,20 @@ const testResultPage: SearchResultPage = {
         day: 27,
       },
     },
-  ],
+  ].map(
+    (item) =>
+      new KakakuItem(
+        item.kakakuId,
+        item.name,
+        item.maker,
+        item.price,
+        item.imgUrl,
+        item.itemUrl,
+        item.releaseDate,
+        undefined,
+        item.rating,
+      ),
+  ),
   filterSections: [
     {
       title: 'カテゴリ',

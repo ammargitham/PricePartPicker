@@ -7,6 +7,7 @@ export interface DBPart {
   partPickerId: string;
   query?: Query;
   kakakuId?: string;
+  selectedKakakuShopId?: number;
 }
 
 export class Database extends Dexie {

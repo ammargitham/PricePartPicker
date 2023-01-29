@@ -311,16 +311,17 @@ function parseResultDiv(result: HTMLDivElement): KakakuItem | undefined {
 
   const itemRating = getResultItemRating(result);
 
-  return {
+  return new KakakuItem(
     kakakuId,
+    itemName,
     maker,
-    name: itemName,
-    price: itemPrice,
-    imgUrl: itemImgUrl,
+    itemPrice,
+    itemImgUrl,
     itemUrl,
     releaseDate,
-    rating: itemRating,
-  };
+    undefined,
+    itemRating,
+  );
 }
 
 function getResultItemRating(
@@ -618,18 +619,18 @@ export function parseKakakuItemResponse(
   const priceTable: HTMLTableElement | null =
     root.querySelector('table.p-priceTable');
   const shops = parseShopsFromPriceTable(priceTable);
-  return {
-    itemUrl,
+  return new KakakuItem(
     kakakuId,
     name,
+    maker,
     price,
     imgUrl,
-    maker,
+    itemUrl,
     releaseDate,
     itemDetails,
+    itemRating,
     shops,
-    rating: itemRating,
-  };
+  );
 }
 
 function parseShopsFromPriceTable(
