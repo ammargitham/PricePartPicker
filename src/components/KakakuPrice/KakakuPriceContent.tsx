@@ -1,5 +1,6 @@
 import React from 'react';
 
+import clsx from 'clsx';
 import browser from 'webextension-polyfill';
 
 import {
@@ -30,13 +31,20 @@ export default function KakakuPriceContent({
   onEditClick,
 }: KakakuPriceContentProps): JSX.Element {
   return (
-    <div className="flex flex-row items-center">
+    <div className={clsx(['flex', 'flex-row', 'items-center'])}>
       {!showSearchDialog && searching && (
-        <Loader className="w-5 h-5 text-gray-600 dark:text-slate-500" />
+        <Loader
+          className={clsx([
+            'w-5',
+            'h-5',
+            'text-gray-600',
+            'dark:text-slate-500',
+          ])}
+        />
       )}
       {!searching && kakakuItem && (
         <>
-          <span className="font-bold text-sm mr-2">
+          <span className={clsx(['font-bold', 'text-sm', 'mr-2'])}>
             {kakakuItem.price
               ? `¥${kakakuItem.price.toLocaleString('ja-JP')}`
               : browser.i18n.getMessage('no_price')}
@@ -44,12 +52,29 @@ export default function KakakuPriceContent({
           <Tooltip
             content={<KakakuItemTooltipContent kakakuItem={kakakuItem} />}
             trigger={
-              <InformationCircleIcon className="w-5 h-5 tw-block text-gray-600 dark:text-slate-500 cursor-pointer" />
+              <InformationCircleIcon
+                className={clsx([
+                  'w-5',
+                  'h-5',
+                  'tw-block',
+                  'text-gray-600',
+                  'dark:text-slate-500',
+                  'cursor-pointer',
+                ])}
+              />
             }
             removePadding
           />
           <PencilSquareIcon
-            className="ml-2 -translate-y-[1px] w-5 h-5 text-gray-600 dark:text-slate-500 cursor-pointer"
+            className={clsx([
+              'ml-2',
+              '-translate-y-[1px]',
+              'w-5',
+              'h-5',
+              'text-gray-600',
+              'dark:text-slate-500',
+              'cursor-pointer',
+            ])}
             onClick={onEditClick}
           />
         </>
@@ -58,7 +83,14 @@ export default function KakakuPriceContent({
         <>
           <span>{browser.i18n.getMessage('no_results')}</span>
           <MagnifyingGlassIcon
-            className="ml-2 w-5 h-5 text-gray-600 dark:text-slate-500 cursor-pointer"
+            className={clsx([
+              'ml-2',
+              'w-5',
+              'h-5',
+              'text-gray-600',
+              'dark:text-slate-500',
+              'cursor-pointer',
+            ])}
             onClick={openDialog}
           />
         </>

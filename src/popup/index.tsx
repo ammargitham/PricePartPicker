@@ -3,8 +3,9 @@ import * as ReactDOM from 'react-dom';
 
 import browser from 'webextension-polyfill';
 
-import '../css/app.css';
 import { Popup } from './component';
+
+import '../css/app.css';
 
 // // // //
 

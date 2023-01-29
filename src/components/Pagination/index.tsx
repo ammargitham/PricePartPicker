@@ -1,5 +1,7 @@
 import React from 'react';
 
+import clsx from 'clsx';
+
 import { KakakuPagination, KakakuPaginationPage } from '@src/types';
 
 interface PaginationProps {
@@ -18,30 +20,43 @@ const getAnchorClasses = ({
   selected,
   clickable,
 }: GetAnchorClassesProps) => {
-  let classNames = `
-    tw-block px-3 py-2 ml-0 border hover:no-underline leading-tight relative
-  `;
   const actualClickable = selected ? false : clickable;
-  if (actualClickable) {
-    classNames += `
-      hover:bg-gray-100 hover:text-gray-700 dark:hover:bg-gray-700
-      dark:hover:text-white hover:cursor-pointer
-    `;
-  }
-  if (selected) {
-    classNames += `
-      z-10 text-blue-600 border-blue-300 bg-blue-50 dark:border-gray-700 dark:bg-gray-700 dark:text-white
-    `;
-    return classNames;
-  }
-  classNames += `
-    bg-white text-gray-500 border-gray-300
-    dark:bg-gray-800 dark:text-gray-400 dark:border-gray-700
-  `;
-  if (disabled) {
-    classNames += `text-gray-500/50 dark:text-gray-400/50`;
-  }
-  return classNames;
+  return clsx([
+    'tw-block',
+    'px-3',
+    'py-2',
+    'ml-0',
+    'border',
+    'hover:no-underline',
+    'leading-tight',
+    'relative',
+    actualClickable && [
+      'hover:bg-gray-100',
+      'hover:text-gray-700',
+      'dark:hover:bg-gray-700',
+      'dark:hover:text-white',
+      'hover:cursor-pointer',
+    ],
+    selected
+      ? [
+          'z-10',
+          'text-blue-600',
+          'border-blue-300',
+          'bg-blue-50',
+          'dark:border-gray-700',
+          'dark:bg-gray-700',
+          'dark:text-white',
+        ]
+      : [
+          'bg-white',
+          'text-gray-500',
+          'border-gray-300',
+          'dark:bg-gray-800',
+          'dark:text-gray-400',
+          'dark:border-gray-700',
+          disabled && ['text-gray-500/50', 'dark:text-gray-400/50'],
+        ],
+  ]);
 };
 
 export default function Pagination({
@@ -59,14 +74,19 @@ export default function Pagination({
   }
 
   return (
-    <nav className="">
-      <ul className="inline-flex items-center -space-x-px px-0">
+    <nav>
+      <ul
+        className={clsx(['inline-flex', 'items-center', '-space-x-px', 'px-0'])}
+      >
         <li>
           <a
-            className={`rounded-l-lg ${getAnchorClasses({
-              disabled: !pagination?.prev,
-              clickable: !!pagination?.prev,
-            })}`}
+            className={clsx([
+              'rounded-l-lg',
+              getAnchorClasses({
+                disabled: !pagination?.prev,
+                clickable: !!pagination?.prev,
+              }),
+            ])}
             onClick={() => {
               if (!pagination?.prev) {
                 return;
@@ -81,7 +101,7 @@ export default function Pagination({
             <span className="sr-only">Previous</span>
             <svg
               aria-hidden="true"
-              className="w-5 h-5 tw-block"
+              className={clsx(['w-5', 'h-5', 'tw-block'])}
               fill="currentColor"
               viewBox="0 0 20 20"
               xmlns="http://www.w3.org/2000/svg"
@@ -116,10 +136,13 @@ export default function Pagination({
         })}
         <li>
           <a
-            className={`rounded-r-lg ${getAnchorClasses({
-              disabled: !pagination?.next,
-              clickable: !!pagination?.next,
-            })}`}
+            className={clsx([
+              'rounded-r-lg',
+              getAnchorClasses({
+                disabled: !pagination?.next,
+                clickable: !!pagination?.next,
+              }),
+            ])}
             onClick={() => {
               if (!pagination?.next) {
                 return;
@@ -134,7 +157,7 @@ export default function Pagination({
             <span className="sr-only">Next</span>
             <svg
               aria-hidden="true"
-              className="w-5 h-5 tw-block"
+              className={clsx(['w-5', 'h-5', 'tw-block'])}
               fill="currentColor"
               viewBox="0 0 20 20"
               xmlns="http://www.w3.org/2000/svg"

@@ -1,9 +1,10 @@
 import React, { useState } from 'react';
 
+import clsx from 'clsx';
 import deepEqual from 'deep-equal';
 import browser from 'webextension-polyfill';
 
-import { InformationCircleIcon, CheckIcon } from '@heroicons/react/24/solid';
+import { CheckIcon, InformationCircleIcon } from '@heroicons/react/24/solid';
 
 import { emptyResultPage } from '@src/constants';
 import { DBPart } from '@src/db';
@@ -52,15 +53,26 @@ export default function SearchDialogContent({
 
   return (
     <div
-      className="flex flex-col max-h-[90vh] bg-white shadow dark:bg-gray-800
-      rounded-lg text-white relative"
+      className={clsx([
+        'flex',
+        'flex-col',
+        'max-h-[90vh]',
+        'bg-white',
+        'shadow',
+        'dark:bg-gray-800',
+        'rounded-lg',
+        'text-white',
+        'relative',
+      ])}
     >
       <PartInfo part={part} onClose={onClose} />
-      <div className="px-4 py-2 flex flex-col overflow-auto">
-        <div className="text-sm text-gray-500 dark:text-gray-400">
-          <span className="">
-            {browser.i18n.getMessage('search_on_kakaku')}
-          </span>
+      <div
+        className={clsx(['px-4', 'py-2', 'flex', 'flex-col', 'overflow-auto'])}
+      >
+        <div
+          className={clsx(['text-sm', 'text-gray-500', 'dark:text-gray-400'])}
+        >
+          <span>{browser.i18n.getMessage('search_on_kakaku')}</span>
         </div>
         <Input
           query={query.query}
@@ -75,19 +87,47 @@ export default function SearchDialogContent({
           }
           onSearch={() => onSearch?.(query)}
         />
-        <div className="flex flex-row flex-1 gap-3 mt-5 overflow-hidden relative">
+        <div
+          className={clsx([
+            'flex',
+            'flex-row',
+            'flex-1',
+            'gap-3',
+            'mt-5',
+            'overflow-hidden',
+            'relative',
+          ])}
+        >
           {searching ? (
             <div
-              className="absolute z-[12] top-0 bottom-0 left-0 right-0 flex
-            items-center justify-center bg-black/70 overflow-hidden"
+              className={clsx([
+                'absolute',
+                'z-[12]',
+                'top-0',
+                'bottom-0',
+                'left-0',
+                'right-0',
+                'flex',
+                'items-center',
+                'justify-center',
+                'bg-black/70',
+                'overflow-hidden',
+              ])}
             >
               <Loader className="w-10 h-10" />
             </div>
           ) : null}
           {resultPage.filterSections?.length ? (
             <div
-              className={`flex flex-col gap-3 min-w-[15%] max-w-[22%] overflow-auto
-              ${getScrollbarClasses()}`}
+              className={clsx([
+                'flex',
+                'flex-col',
+                'gap-3',
+                'min-w-[15%]',
+                'max-w-[22%]',
+                'overflow-auto',
+                getScrollbarClasses(),
+              ])}
             >
               {resultPage?.filterSections?.map((section) => (
                 <FilterRadioSectionComponent
@@ -106,9 +146,25 @@ export default function SearchDialogContent({
               ))}
             </div>
           ) : null}
-          <div className="flex-1 overflow-auto flex flex-col gap-4">
+          <div
+            className={clsx([
+              'flex-1',
+              'overflow-auto',
+              'flex',
+              'flex-col',
+              'gap-4',
+            ])}
+          >
             {resultPage && resultPage.results.length ? (
-              <div className="flex flex-row items-center gap-4 mt-[4px]">
+              <div
+                className={clsx([
+                  'flex',
+                  'flex-row',
+                  'items-center',
+                  'gap-4',
+                  'mt-[4px]',
+                ])}
+              >
                 <div className="flex-1">
                   {resultPage.info ? (
                     <ResultInfo info={resultPage.info} />
@@ -120,22 +176,34 @@ export default function SearchDialogContent({
                     // TODO: refactor below button into a component
                     <button
                       type="button"
-                      className={`flex flex-row items-center px-4 py-2 text-sm font-medium
-                        rounded-lg
-                        ${isCurrentQueryUsed ? 'cursor-default' : null}
-                        ${isCurrentQueryUsed ? 'text-gray-900' : 'text-white'}
-                        ${
-                          isCurrentQueryUsed
-                            ? 'bg-green-400'
-                            : 'bg-green-700 hover:bg-green-800'
-                        }
-                        ${
-                          isCurrentQueryUsed
-                            ? 'dark:bg-green-500'
-                            : 'dark:bg-green-600 dark:hover:bg-green-700'
-                        }
-                        focus:outline-none focus:ring-4 focus:ring-green-300 dark:focus:ring-green-800
-                      `}
+                      className={clsx([
+                        'flex',
+                        'flex-row',
+                        'items-center',
+                        'px-4',
+                        'py-2',
+                        'text-sm',
+                        'font-medium',
+                        'rounded-lg',
+                        'focus:outline-none',
+                        'focus:ring-4',
+                        'focus:ring-green-300',
+                        'dark:focus:ring-green-800',
+                        isCurrentQueryUsed
+                          ? [
+                              'cursor-default',
+                              'text-gray-900',
+                              'bg-green-400',
+                              'dark:bg-green-500',
+                            ]
+                          : [
+                              'text-white',
+                              'bg-green-700',
+                              'dark:bg-green-600',
+                              'hover:bg-green-800',
+                              'dark:hover:bg-green-700',
+                            ],
+                      ])}
                       onClick={() => {
                         if (isCurrentQueryUsed) {
                           return;
@@ -144,7 +212,9 @@ export default function SearchDialogContent({
                       }}
                     >
                       {isCurrentQueryUsed ? (
-                        <CheckIcon className="mr-2 -ml w-4 h-4" />
+                        <CheckIcon
+                          className={clsx(['mr-2', '-ml', 'w-4', 'h-4'])}
+                        />
                       ) : null}
                       <span>
                         {browser.i18n.getMessage(
@@ -154,19 +224,45 @@ export default function SearchDialogContent({
                         )}
                       </span>
                       {!isCurrentQueryUsed ? (
-                        <InformationCircleIcon className="ml-2 -mr-1 w-5 h-5" />
+                        <InformationCircleIcon
+                          className={clsx(['ml-2', '-mr-1', 'w-5', 'h-5'])}
+                        />
                       ) : null}
                     </button>
                   }
                 />
-                <div className="flex flex-row items-center gap-2 text-gray-900 dark:text-white">
+                <div
+                  className={clsx([
+                    'flex',
+                    'flex-row',
+                    'items-center',
+                    'gap-2',
+                    'text-gray-900',
+                    'dark:text-white',
+                  ])}
+                >
                   {browser.i18n.getMessage('sort')}:
                   <select
-                    className="bg-gray-50 border border-gray-300 text-gray-900
-                    text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500
-                    tw-block w-40 mr-1 p-2 dark:bg-gray-700 dark:border-gray-600
-                    dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500
-                    dark:focus:border-blue-500"
+                    className={clsx([
+                      'tw-block',
+                      'w-40',
+                      'mr-1',
+                      'p-2',
+                      'text-sm',
+                      'rounded-lg',
+                      'bg-gray-50',
+                      'dark:bg-gray-700',
+                      'border',
+                      'border-gray-300',
+                      'dark:border-gray-600',
+                      'focus:border-blue-500',
+                      'dark:focus:border-blue-500',
+                      'text-gray-900',
+                      'dark:text-white',
+                      'focus:ring-blue-500',
+                      'dark:focus:ring-blue-500',
+                      'dark:placeholder-gray-400',
+                    ])}
                     onChange={(e) => {
                       const newSort = e.target.value;
                       const newFilters = query.filters || {};
@@ -206,8 +302,13 @@ export default function SearchDialogContent({
             {resultPage && resultPage.results.length ? (
               <div className={`overflow-auto ${getScrollbarClasses()}`}>
                 <ul
-                  className="divide-y divide-gray-300 dark:divide-gray-700
-                pl-2 pr-4"
+                  className={clsx([
+                    'divide-y',
+                    'divide-gray-300',
+                    'dark:divide-gray-700',
+                    'pl-2',
+                    'pr-4',
+                  ])}
                 >
                   {resultPage.results.map((r, i) => (
                     <SearchResultItem
@@ -239,7 +340,16 @@ export default function SearchDialogContent({
                 </div>
               </div>
             ) : (
-              <p className="text-sm font-medium text-gray-900 truncate dark:text-white mt-4">
+              <p
+                className={clsx([
+                  'text-sm',
+                  'font-medium',
+                  'text-gray-900',
+                  'dark:text-white',
+                  'truncate',
+                  'mt-4',
+                ])}
+              >
                 {browser.i18n.getMessage('no_results')}
               </p>
             )}

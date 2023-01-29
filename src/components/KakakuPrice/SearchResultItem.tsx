@@ -1,5 +1,6 @@
 import React from 'react';
 
+import clsx from 'clsx';
 import browser from 'webextension-polyfill';
 
 import { CheckIcon } from '@heroicons/react/24/solid';
@@ -24,26 +25,36 @@ export default function SearchResultItem({
   isUsed,
   onUseClick,
 }: SearchResultItemProps): JSX.Element {
-  function getClass() {
-    if (isFirst) {
-      return 'pb-3 sm:pb-4';
-    }
-    if (isLast) {
-      return 'pt-3 pb-0 sm:pt-4';
-    }
-    return 'py-3 sm:py-4';
-  }
-
   return (
-    <li className={`${getClass()} border-solid`}>
-      <div className="flex items-center space-x-4">
+    <li
+      className={clsx([
+        isFirst && ['pb-3', 'sm:pb-4'],
+        isLast && ['pt-3', 'pb-0', 'sm:pt-4'],
+        !isFirst && !isLast && ['py-3', 'sm:py-4'],
+        'border-solid',
+      ])}
+    >
+      <div className={clsx(['flex', 'items-center', 'space-x-4'])}>
         <div className="flex-shrink-0">
           <img className="w-12 h-12" src={searchResult.imgUrl || ''} />
         </div>
         <div className="flex-1 min-w-0">
-          <p className="text-sm font-medium text-gray-900 !truncate dark:text-white">
+          <p
+            className={clsx([
+              'text-sm',
+              'font-medium',
+              'text-gray-900',
+              'dark:text-white',
+              '!truncate',
+            ])}
+          >
             <a
-              className="text-blue-600 dark:text-blue-400 visited:text-purple-600 underline"
+              className={clsx([
+                'text-blue-600',
+                'dark:text-blue-400',
+                'visited:text-purple-600',
+                'underline',
+              ])}
               href={searchResult.itemUrl}
               target="_blank"
               rel="noopener noreferrer"
@@ -52,8 +63,20 @@ export default function SearchResultItem({
             </a>
           </p>
           <div
-            className="flex flex-row flex-wrap gap-1 divide-x divide-gray-200 dark:divide-gray-700
-            text-sm text-gray-500 truncate dark:text-gray-400 mt-1"
+            className={clsx([
+              'flex',
+              'flex-row',
+              'flex-wrap',
+              'gap-1',
+              'divide-x',
+              'divide-gray-200',
+              'dark:divide-gray-700',
+              'text-sm',
+              'truncate',
+              'text-gray-500',
+              'dark:text-gray-400',
+              'mt-1',
+            ])}
           >
             {searchResult.rating ? (
               <Rating
@@ -75,8 +98,16 @@ export default function SearchResultItem({
           </div>
         </div>
         <div
-          className="inline-flex flex-col items-center text-base font-semibold
-          text-gray-900 dark:text-white gap-2"
+          className={clsx([
+            'inline-flex',
+            'flex-col',
+            'items-center',
+            'text-base',
+            'font-semibold',
+            'text-gray-900',
+            'dark:text-white',
+            'gap-2',
+          ])}
         >
           <span>
             {searchResult.price
@@ -85,20 +116,40 @@ export default function SearchResultItem({
           </span>
           <button
             type="button"
-            className={`flex flex-row items-center px-3.5 py-1.5 text-sm font-medium text-center
-            ${isUsed ? 'cursor-default' : null}
-            ${isUsed ? 'text-gray-900' : 'text-white'}
-            ${isUsed ? 'bg-green-400' : 'bg-green-700 hover:bg-green-800'}
-            ${
+            className={clsx([
+              'flex',
+              'flex-row',
+              'items-center',
+              'px-3.5',
+              'py-1.5',
+              'text-sm',
+              'font-medium',
+              'text-center',
+              'focus:outline-none',
+              'focus:ring-4',
+              'focus:ring-green-300',
+              'dark:focus:ring-green-800',
+              'rounded-lg',
               isUsed
-                ? 'dark:bg-green-500'
-                : 'dark:bg-green-600 dark:hover:bg-green-700'
-            }
-            focus:outline-none focus:ring-4 focus:ring-green-300 dark:focus:ring-green-800
-            rounded-lg`}
+                ? [
+                    'cursor-default',
+                    'text-gray-900',
+                    'bg-green-400',
+                    'dark:bg-green-500',
+                  ]
+                : [
+                    'text-white',
+                    'bg-green-700',
+                    'hover:bg-green-800',
+                    'dark:bg-green-600',
+                    'dark:hover:bg-green-700',
+                  ],
+            ])}
             onClick={isUsed ? undefined : onUseClick}
           >
-            {isUsed ? <CheckIcon className="mr-2 -ml w-3.5 h-3.5" /> : null}
+            {isUsed ? (
+              <CheckIcon className={clsx(['mr-2', '-ml', 'w-3.5', 'h-3.5'])} />
+            ) : null}
             <span>
               {browser.i18n.getMessage(
                 isUsed ? 'using_this_item' : 'use_this_item',

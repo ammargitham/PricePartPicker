@@ -1,5 +1,7 @@
 import * as React from 'react';
 
+import clsx from 'clsx';
+
 import { ComponentMeta } from '@storybook/react';
 
 import { KakakuItemShop } from '@src/types';
@@ -33,8 +35,26 @@ const tempShop: KakakuItemShop = {
 };
 
 export const Default = (): JSX.Element => (
-  <div className="bg-white divide-y divide-gray-100 rounded shadow w-fit dark:bg-gray-700">
-    <ul className="px-0 py-1 text-sm text-gray-700 dark:text-gray-200">
+  <div
+    className={clsx([
+      'bg-white',
+      'divide-y',
+      'divide-gray-100',
+      'rounded',
+      'shadow',
+      'w-fit',
+      'dark:bg-gray-700',
+    ])}
+  >
+    <ul
+      className={clsx([
+        'px-0',
+        'py-1',
+        'text-sm',
+        'text-gray-700',
+        'dark:text-gray-200',
+      ])}
+    >
       <KakakuItemShopListItem shop={tempShop} />
     </ul>
   </div>

@@ -67,11 +67,13 @@ function KakakuItemShopListItem({
         'dark:text-white',
       ])}
     >
-      <div className="flex flex-col gap-3">
-        <div className="flex flex-row gap-2 items-center">
+      <div className={clsx(['flex', 'flex-col', 'gap-3'])}>
+        <div className={clsx(['flex', 'flex-row', 'gap-2', 'items-center'])}>
           <span>{shop.name || ''}</span>
           {shop.shopArea ? (
-            <span className="text-gray-400 dark:text-gray-400">{`(${shop.shopArea})`}</span>
+            <span
+              className={clsx(['text-gray-400', 'dark:text-gray-400'])}
+            >{`(${shop.shopArea})`}</span>
           ) : null}
           {/*
             {shop.nameIconUrl ? (
@@ -132,7 +134,7 @@ function KakakuItemShopListItem({
           ) : null}
         */}
       </div>
-      <span className="text-lg font-semibold">
+      <span className={clsx(['text-lg', 'font-semibold'])}>
         {shop.price !== undefined
           ? `¥${shop.price.toLocaleString('ja-JP')}`
           : browser.i18n.getMessage('no_price')}

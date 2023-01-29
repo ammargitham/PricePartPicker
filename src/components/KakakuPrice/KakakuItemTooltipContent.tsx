@@ -1,5 +1,6 @@
 import React from 'react';
 
+import clsx from 'clsx';
 import browser from 'webextension-polyfill';
 
 import { KakakuItem } from '@src/types';
@@ -18,14 +19,20 @@ export default function KakakuItemTooltipContent({
     ? kakakuItem.shops?.find((s) => s.id === kakakuItem.selectedShopId)
     : undefined;
   return (
-    <div className="w-full rounded-t-lg translate-y-[1px]">
+    <div className={clsx(['w-full', 'rounded-t-lg', 'translate-y-[1px]'])}>
       {kakakuItem.imgUrl && (
         <a
-          className="tw-block p-2 rounded-t-lg bg-white -translate-y-[1px]"
+          className={clsx([
+            'tw-block',
+            'p-2',
+            'rounded-t-lg',
+            'bg-white',
+            '-translate-y-[1px]',
+          ])}
           href={kakakuItem.itemUrl}
         >
           <img
-            className="m-auto min-h-[8rem] max-h-[12rem]"
+            className={clsx(['m-auto', 'min-h-[8rem]', 'max-h-[12rem]'])}
             src={kakakuItem.imgUrl}
             alt="Image"
           />
@@ -33,7 +40,15 @@ export default function KakakuItemTooltipContent({
       )}
       <div className="p-5">
         <a href={kakakuItem.itemUrl}>
-          <h5 className="text-xl font-semibold tracking-tight text-gray-900 dark:text-white">
+          <h5
+            className={clsx([
+              'text-xl',
+              'font-semibold',
+              'tracking-tight',
+              'text-gray-900',
+              'dark:text-white',
+            ])}
+          >
             {getFullName(kakakuItem.name, kakakuItem.maker)}
           </h5>
         </a>
@@ -44,8 +59,15 @@ export default function KakakuItemTooltipContent({
         />
         {kakakuItem.releaseDate || (kakakuItem.itemDetails?.length || 0) > 0 ? (
           <ul
-            className="space-y-1 px-4 mb-5 list-disc list-outside text-gray-500
-          dark:text-gray-400"
+            className={clsx([
+              'space-y-1',
+              'px-4',
+              'mb-5',
+              'list-disc',
+              'list-outside',
+              'text-gray-500',
+              'dark:text-gray-400',
+            ])}
           >
             {kakakuItem.releaseDate ? (
               <li>
@@ -61,17 +83,26 @@ export default function KakakuItemTooltipContent({
           </ul>
         ) : null}
         <div className="flex items-baseline">
-          <span className="text-3xl font-bold text-gray-900 dark:text-white">
+          <span
+            className={clsx([
+              'text-3xl',
+              'font-bold',
+              'text-gray-900',
+              'dark:text-white',
+            ])}
+          >
             {kakakuItem.price
               ? `¥${kakakuItem.price.toLocaleString('ja-JP')}`
               : 'No price information'}
           </span>
           {selectedShop ? (
-            <span className="text-sm text-gray-400 ml-4">
+            <span className={clsx(['text-sm', 'text-gray-400', 'ml-4'])}>
               <span className="font-light ">
                 {browser.i18n.getMessage('sold_by')}
               </span>
-              <span className="ml-1 text-gray-900 dark:text-white">
+              <span
+                className={clsx(['ml-1', 'text-gray-900', 'dark:text-white'])}
+              >
                 {selectedShop.name || ''}
               </span>
             </span>

@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
 
+import clsx from 'clsx';
+
 import { ComponentMeta, Story } from '@storybook/react';
 
 import Dialog, { DialogProps } from '..';
@@ -25,7 +27,7 @@ const Template: Story<DialogProps> = ({ children, ...others }) => {
 
 export const Default = Template.bind({});
 Default.args = {
-  className: 'text-black bg-white rounded p-3',
+  className: clsx(['text-black', 'bg-white', 'rounded', 'p-3']),
   title: 'Test title',
   children: <div>This is a test</div>,
 };

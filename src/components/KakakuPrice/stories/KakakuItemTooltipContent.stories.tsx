@@ -1,5 +1,7 @@
 import * as React from 'react';
 
+import clsx from 'clsx';
+
 import { ComponentMeta } from '@storybook/react';
 
 import { KakakuItem } from '@src/types';
@@ -43,9 +45,21 @@ const kakakuItem = new KakakuItem(
 
 export const Default = (): JSX.Element => (
   <div
-    className="min-w-[5rem] max-w-[25rem] w-fit z-10 text-gray-500
-    bg-white border border-gray-200 rounded-lg shadow-sm dark:text-gray-400
-    dark:border-gray-600 dark:bg-gray-800"
+    className={clsx([
+      'min-w-[5rem]',
+      'max-w-[25rem]',
+      'w-fit',
+      'z-10',
+      'text-gray-500',
+      'bg-white',
+      'border',
+      'border-gray-200',
+      'rounded-lg',
+      'shadow-sm',
+      'dark:text-gray-400',
+      'dark:border-gray-600',
+      'dark:bg-gray-800',
+    ])}
   >
     <KakakuItemTooltipContent kakakuItem={kakakuItem} />
   </div>

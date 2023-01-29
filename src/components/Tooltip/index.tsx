@@ -3,12 +3,12 @@ import React, { ReactNode } from 'react';
 import clsx from 'clsx';
 
 import {
-  Root,
-  Provider,
-  Trigger,
-  Portal,
-  Content,
   Arrow,
+  Content,
+  Portal,
+  Provider,
+  Root,
+  Trigger,
 } from '@radix-ui/react-tooltip';
 
 interface TooltipProps {
