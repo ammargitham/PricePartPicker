@@ -4,19 +4,26 @@ import browser from 'webextension-polyfill';
 import { Event } from './constants';
 import { DBPart } from './db';
 import { addOrUpdatePart, subscribeDbPartEvents } from './db/helpers';
-import { KakakuItem, MessageEvent, Part, Query } from './types';
+import { CustomPrice, KakakuItem, MessageEvent, Part, Query } from './types';
 
 export class AddOrUpdatePartEvent extends MessageEvent {
   event: Event = Event.ADD_PART_TO_DB;
   part: Part;
   query?: Query;
   kakakuItem?: KakakuItem;
+  customPrice?: CustomPrice;
 
-  constructor(part: Part, query?: Query, kakakuItem?: KakakuItem) {
+  constructor(
+    part: Part,
+    query?: Query,
+    kakakuItem?: KakakuItem,
+    customPrice?: CustomPrice,
+  ) {
     super();
     this.part = part;
     this.query = query;
     this.kakakuItem = kakakuItem;
+    this.customPrice = customPrice;
   }
 }
 
@@ -62,6 +69,7 @@ interface AddPartProxyProps {
   part: Part;
   query?: Query;
   kakakuItem?: KakakuItem;
+  customPrice?: CustomPrice;
 }
 
 /**
@@ -74,11 +82,12 @@ export function addPartProxy({
   part,
   query,
   kakakuItem,
+  customPrice,
 }: AddPartProxyProps): void {
-  if (!query && !kakakuItem) {
-    throw Error('query or kakakuItem expected');
+  if (!query && !kakakuItem && !customPrice) {
+    throw Error('query or kakakuItem or customPrice expected');
   }
-  const event = new AddOrUpdatePartEvent(part, query, kakakuItem);
+  const event = new AddOrUpdatePartEvent(part, query, kakakuItem, customPrice);
   const dbPort = browser.runtime.connect({ name: 'db' });
   dbPort.postMessage(event);
 }
@@ -104,6 +113,7 @@ export function setupDbPort(port: Port): void {
           addPartEvent.query,
           addPartEvent.kakakuItem?.kakakuId,
           addPartEvent.kakakuItem?.selectedShopId,
+          addPartEvent.customPrice,
         )
           .then(() => {
             // console.log(id);

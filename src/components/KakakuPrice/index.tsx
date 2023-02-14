@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 
 import { addPartProxy } from '@src/dbHelper';
 import useKakakuSearch from '@src/hooks/useKakakuSearch';
-import { KakakuItem, Part } from '@src/types';
+import { CustomPrice, KakakuItem, Part } from '@src/types';
 
 import Dialog from '../Dialog';
 import KakakuPriceContent from './KakakuPriceContent';
@@ -10,7 +10,7 @@ import SearchDialogContent from './SearchDialogContent';
 
 interface KakakuPriceProps {
   part: Part;
-  onItemChange?: (kakakuItem?: KakakuItem) => void;
+  onItemChange?: (kakakuItem?: KakakuItem, customPrice?: CustomPrice) => void;
 }
 
 export default function KakakuPrice({
@@ -22,14 +22,12 @@ export default function KakakuPrice({
   const { kakakuItem, searching, resultPage, dbPart, search } =
     useKakakuSearch(part);
 
-  // const hasResults = !!resultPage?.results.length;
-
   const openDialog = () => setShowSearchDialog(true);
   const closeDialog = () => setShowSearchDialog(false);
 
   useEffect(() => {
-    onItemChange?.(kakakuItem);
-  }, [kakakuItem, onItemChange]);
+    onItemChange?.(kakakuItem, dbPart?.customPrice);
+  }, [dbPart?.customPrice, kakakuItem, onItemChange]);
 
   return (
     <>
@@ -37,16 +35,12 @@ export default function KakakuPrice({
         searching={searching}
         showSearchDialog={showSearchDialog}
         kakakuItem={kakakuItem}
+        customPrice={dbPart?.customPrice}
         openDialog={openDialog}
         onEditClick={openDialog}
       />
       {showSearchDialog && (
-        <Dialog
-          className="w-[70vw] max-w-[1200px]"
-          open
-          hideCloseButton
-          onDismiss={closeDialog}
-        >
+        <Dialog open hideCloseButton onDismiss={closeDialog}>
           <SearchDialogContent
             part={part}
             resultPage={resultPage}
@@ -62,6 +56,10 @@ export default function KakakuPrice({
             onUseResultClick={(r) => {
               // console.log(r);
               addPartProxy({ part, kakakuItem: r });
+              closeDialog();
+            }}
+            onSaveCustomPrice={(customPrice) => {
+              addPartProxy({ part, customPrice });
               closeDialog();
             }}
           />

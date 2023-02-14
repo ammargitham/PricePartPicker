@@ -76,5 +76,41 @@
   },
   "where": {
     "message": "Where"
+  },
+  "or": {
+    "message": "or"
+  },
+  "use_custom_price": {
+    "message": "Use a custom price"
+  },
+  "custom": {
+    "message": "Custom"
+  },
+  "custom_price": {
+    "message": "Custom Price"
+  },
+  "required": {
+    "message": "Required"
+  },
+  "product_name": {
+    "message": "Product name"
+  },
+  "product_url": {
+    "message": "Product URL"
+  },
+  "product_price": {
+    "message": "Product price"
+  },
+  "save": {
+    "message": "Save"
+  },
+  "using_custom_price": {
+    "message": "Using custom price"
+  },
+  "choose_a_shop": {
+    "message": "Choose a shop"
+  },
+  "no_shops": {
+    "message": "No shops"
   }
 }

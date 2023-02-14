@@ -6,8 +6,10 @@ import browser from 'webextension-polyfill';
 import KakakuPrice from './components/KakakuPrice';
 import KakakuItemShopSelect from './components/KakakuPrice/KakakuItemShopSelect';
 import { addPartProxy } from './dbHelper';
-import { KakakuItem, Part } from './types';
+import { CustomPrice, KakakuItem, Part } from './types';
 import { getFullName, htmlToElement, insertAfter } from './utils';
+
+const { getMessage } = browser.i18n;
 
 function updateTotal(
   kakakuTotalPriceCell: HTMLTableCellElement | null,
@@ -150,25 +152,30 @@ export function addKakakuColumns(
     ReactDOM.render(
       <KakakuPrice
         part={part}
-        onItemChange={(item) => {
-          partPrices[part.partPickerId] = item?.price;
+        onItemChange={(item, customPrice) => {
+          partPrices[part.partPickerId] = item?.price || customPrice?.price;
           updateTotal(kakakuTotalPriceCell, partPrices);
           if (nameCell) {
-            updateName(nameCell, item);
+            updateName(nameCell, item, customPrice);
           }
           if (buyButton) {
             updateBuyButton(buyButton, item);
           }
-          updateWhere(whereCell, item, (id) => {
-            if (!item) {
-              return;
-            }
-            const clonedItem = item.clone();
-            clonedItem.selectedShopId = id;
-            addPartProxy({
-              part,
-              kakakuItem: clonedItem,
-            });
+          updateWhere({
+            whereCell,
+            item,
+            customPrice,
+            onChange: (id) => {
+              if (!item) {
+                return;
+              }
+              const clonedItem = item.clone();
+              clonedItem.selectedShopId = id;
+              addPartProxy({
+                part,
+                kakakuItem: clonedItem,
+              });
+            },
           });
         }}
       />,
@@ -250,16 +257,20 @@ function createWhereCell() {
   return whereCell;
 }
 
-function updateName(nameCell: HTMLTableCellElement, item?: KakakuItem) {
+function updateName(
+  nameCell: HTMLTableCellElement,
+  item?: KakakuItem,
+  customPrice?: CustomPrice,
+) {
   const existing = nameCell.querySelector('a.price-part-picker.name');
-  if (!item) {
+  if (!item && !customPrice) {
     if (existing) {
       // remove the name
       existing.remove();
     }
     return;
   }
-  const kakakuName = createKakakuItemNameElement(item);
+  const kakakuName = createKakakuItemNameElement(item, customPrice);
   if (existing) {
     nameCell.replaceChild(kakakuName, existing);
     return;
@@ -267,9 +278,19 @@ function updateName(nameCell: HTMLTableCellElement, item?: KakakuItem) {
   nameCell.appendChild(kakakuName);
 }
 
-function createKakakuItemNameElement(item: KakakuItem) {
+function createKakakuItemNameElement(
+  item?: KakakuItem,
+  customPrice?: CustomPrice,
+) {
   const a = document.createElement('a');
-  a.href = item.itemUrl;
+  if (!item && !customPrice) {
+    return a;
+  }
+  if (item) {
+    a.href = item.itemUrl;
+  } else if (customPrice && customPrice.url) {
+    a.href = customPrice.url;
+  }
   a.classList.add(
     'price-part-picker',
     'name',
@@ -279,11 +300,29 @@ function createKakakuItemNameElement(item: KakakuItem) {
     'italic',
     'mt-1',
   );
+  if (customPrice && !customPrice.url) {
+    // make anchor act as normal text, if no url
+    a.classList.add(
+      'hover:no-underline',
+      'hover:!text-[#191b2a]',
+      'hover:dark:!text-white',
+    );
+  }
   const span = document.createElement('span');
   span.classList.add('kakaku', 'mr-1', 'text-gray-600', 'dark:text-slate-400');
-  span.textContent = `${browser.i18n.getMessage('kakaku_com')}:`;
+  if (item) {
+    span.textContent = `${getMessage('kakaku_com')}:`;
+  } else if (customPrice) {
+    span.textContent = `${getMessage('custom')}:`;
+  }
   a.appendChild(span);
-  const text = document.createTextNode(getFullName(item.name, item.maker));
+  let textContent = '';
+  if (item) {
+    textContent = getFullName(item.name, item.maker);
+  } else if (customPrice) {
+    textContent = customPrice.name;
+  }
+  const text = document.createTextNode(textContent);
   a.appendChild(text);
   return a;
 }
@@ -339,15 +378,24 @@ function updateBuyButton(buyButton: HTMLAnchorElement, item?: KakakuItem) {
   buyButton.appendChild(newTabIcon.cloneNode(true));
 }
 
-function updateWhere(
-  whereCell: HTMLTableCellElement,
-  item?: KakakuItem,
-  onChange?: (id: number) => void,
-) {
+interface UpdateWhereProps {
+  whereCell: HTMLTableCellElement;
+  item?: KakakuItem;
+  customPrice?: CustomPrice;
+  onChange?: (id: number) => void;
+}
+
+function updateWhere({
+  whereCell,
+  item,
+  customPrice,
+  onChange,
+}: UpdateWhereProps) {
   ReactDOM.render(
     <KakakuItemShopSelect
       shops={item?.shops}
       value={item?.selectedShopId}
+      hasCustomPrice={!!customPrice}
       onChange={onChange}
     />,
     whereCell,

@@ -1,6 +1,6 @@
 import { IndexableType, Observer, Subscription, liveQuery } from 'dexie';
 
-import { Query } from '@src/types';
+import { CustomPrice, Query } from '@src/types';
 
 import { DBPart, db } from '.';
 
@@ -16,6 +16,7 @@ export async function addOrUpdatePart(
   query?: Query,
   kakakuId?: string,
   selectedKakakuShopId?: number,
+  customPrice?: CustomPrice,
 ): Promise<IndexableType> {
   const existing = await db.parts.get({ partPickerId });
   if (!existing) {
@@ -24,6 +25,7 @@ export async function addOrUpdatePart(
       query,
       kakakuId,
       selectedKakakuShopId,
+      customPrice,
     });
   }
   if (!existing.id) {
@@ -33,6 +35,7 @@ export async function addOrUpdatePart(
     query,
     kakakuId,
     selectedKakakuShopId,
+    customPrice,
   });
   // console.log(id);
   return existing.id;

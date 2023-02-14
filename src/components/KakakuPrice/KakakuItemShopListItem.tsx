@@ -7,10 +7,12 @@ import { KakakuItemShop } from '@src/types';
 
 interface KakakuItemShopListItemProps {
   shop: KakakuItemShop;
+  isSelected?: boolean;
 }
 
 function KakakuItemShopListItem({
   shop,
+  isSelected,
 }: KakakuItemShopListItemProps): JSX.Element {
   // const rankBadgeColor = useMemo(() => {
   //   switch (shop.rank) {
@@ -63,8 +65,7 @@ function KakakuItemShopListItem({
         'w-full',
         'min-w-[12rem]',
         'text-sm',
-        'text-black',
-        'dark:text-white',
+        isSelected ? ['text-white'] : ['text-black', 'dark:text-white'],
       ])}
     >
       <div className={clsx(['flex', 'flex-col', 'gap-3'])}>

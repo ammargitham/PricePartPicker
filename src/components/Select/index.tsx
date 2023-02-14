@@ -1,4 +1,10 @@
-import React, { ForwardedRef, Key, ReactNode, useMemo } from 'react';
+import React, {
+  ForwardedRef,
+  Key,
+  ReactNode,
+  useCallback,
+  useMemo,
+} from 'react';
 
 import clsx from 'clsx';
 
@@ -20,11 +26,13 @@ import {
   Viewport,
 } from '@radix-ui/react-select';
 
+type ContentType = ReactNode | ((isSelected?: boolean) => ReactNode);
+
 export interface Option {
   key: Key;
   value: RadixSelectItemProps['value'];
   text?: string;
-  content: ReactNode;
+  content: ContentType;
 }
 
 interface SelectProps {
@@ -33,6 +41,13 @@ interface SelectProps {
   value?: RadixSelectProps['value'];
   disabled?: boolean;
   onChange?: (value: string) => void;
+}
+
+function renderOption(option: Option, isSelected?: boolean): ReactNode {
+  if (typeof option.content === 'function') {
+    return option.content(isSelected);
+  }
+  return option.content;
 }
 
 export default function Select({
@@ -46,6 +61,17 @@ export default function Select({
     () => options.find((o) => o.value === value),
     [options, value],
   );
+
+  const renderValue = useCallback((): ReactNode => {
+    if (!selectedOption) {
+      return null;
+    }
+    if (selectedOption.text) {
+      return selectedOption.text;
+    }
+    return renderOption(selectedOption, true);
+  }, [selectedOption]);
+
   return (
     <Root value={value} disabled={disabled} onValueChange={onChange}>
       <Trigger
@@ -81,11 +107,7 @@ export default function Select({
             'whitespace-nowrap',
           ])}
         >
-          <Value placeholder={placeholder}>
-            {selectedOption
-              ? selectedOption.text || selectedOption.content
-              : null}
-          </Value>
+          <Value placeholder={placeholder}>{renderValue()}</Value>
         </span>
         <Icon className={clsx(['text-gray-900', 'dark:text-gray-400'])}>
           <ChevronDownIcon className={clsx(['w-4', 'h-4', 'tw-block'])} />
@@ -163,7 +185,7 @@ function ItemComponent(
         'dark:focus:text-white',
       ])}
     >
-      <ItemText>{option.content}</ItemText>
+      <ItemText>{renderOption(option, isSelected)}</ItemText>
     </RadixItem>
   );
 }

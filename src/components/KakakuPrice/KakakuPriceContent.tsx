@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 
 import clsx from 'clsx';
 import browser from 'webextension-polyfill';
@@ -9,7 +9,7 @@ import {
   PencilSquareIcon,
 } from '@heroicons/react/24/solid';
 
-import { KakakuItem } from '@src/types';
+import { CustomPrice, KakakuItem } from '@src/types';
 
 import Loader from '../Icons/Loader';
 import Tooltip from '../Tooltip';
@@ -19,6 +19,7 @@ interface KakakuPriceContentProps {
   searching?: boolean;
   showSearchDialog?: boolean;
   kakakuItem?: KakakuItem;
+  customPrice?: CustomPrice;
   openDialog?: () => void;
   onEditClick?: () => void;
 }
@@ -27,9 +28,14 @@ export default function KakakuPriceContent({
   searching = false,
   showSearchDialog = false,
   kakakuItem,
+  customPrice,
   openDialog,
   onEditClick,
 }: KakakuPriceContentProps): JSX.Element {
+  const price = useMemo(
+    () => kakakuItem?.price || customPrice?.price,
+    [customPrice?.price, kakakuItem?.price],
+  );
   return (
     <div className={clsx(['flex', 'flex-row', 'items-center'])}>
       {!showSearchDialog && searching && (
@@ -42,29 +48,31 @@ export default function KakakuPriceContent({
           ])}
         />
       )}
-      {!searching && kakakuItem && (
+      {!searching && (kakakuItem || customPrice) && (
         <>
           <span className={clsx(['font-bold', 'text-sm', 'mr-2'])}>
-            {kakakuItem.price
-              ? `¥${kakakuItem.price.toLocaleString('ja-JP')}`
+            {price
+              ? `¥${price.toLocaleString('ja-JP')}`
               : browser.i18n.getMessage('no_price')}
           </span>
-          <Tooltip
-            content={<KakakuItemTooltipContent kakakuItem={kakakuItem} />}
-            trigger={
-              <InformationCircleIcon
-                className={clsx([
-                  'w-5',
-                  'h-5',
-                  'tw-block',
-                  'text-gray-600',
-                  'dark:text-slate-500',
-                  'cursor-pointer',
-                ])}
-              />
-            }
-            removePadding
-          />
+          {kakakuItem ? (
+            <Tooltip
+              content={<KakakuItemTooltipContent kakakuItem={kakakuItem} />}
+              trigger={
+                <InformationCircleIcon
+                  className={clsx([
+                    'w-5',
+                    'h-5',
+                    'tw-block',
+                    'text-gray-600',
+                    'dark:text-slate-500',
+                    'cursor-pointer',
+                  ])}
+                />
+              }
+              removePadding
+            />
+          ) : null}
           <PencilSquareIcon
             className={clsx([
               'ml-2',
@@ -79,7 +87,7 @@ export default function KakakuPriceContent({
           />
         </>
       )}
-      {!searching && !kakakuItem && (
+      {!searching && !kakakuItem && !customPrice && (
         <>
           <span>{browser.i18n.getMessage('no_results')}</span>
           <MagnifyingGlassIcon

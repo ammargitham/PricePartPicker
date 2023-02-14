@@ -7,6 +7,15 @@ body {
 }
 
 @layer base {
+
+  input[type='number']::-webkit-outer-spin-button,
+  input[type='number']::-webkit-inner-spin-button,
+  input[type='number'] {
+    -webkit-appearance: none;
+    margin: 0;
+    -moz-appearance: textfield !important;
+  }
+
   .tw-block {
     @apply block;
   }
@@ -35,6 +44,11 @@ body {
 @layer components {
   .select-scroll-icon {
     @apply flex items-center justify-center h-6 cursor-default;
+  }
+
+  .border-input {
+    border: 1px solid black !important;
+    @apply border border-gray-300 focus:border-blue-500 dark:border-gray-600 dark:focus:border-blue-500 #{!important};
   }
 }
 

@@ -62,6 +62,7 @@ function Dialog({
             '-translate-y-1/2',
             'focus:outline-none',
             'animate-contentShow',
+            'z-[999]',
           ])}
         >
           {title ? (

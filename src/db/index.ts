@@ -1,6 +1,6 @@
 import Dexie, { Table } from 'dexie';
 
-import { Query } from '@src/types';
+import { CustomPrice, Query } from '@src/types';
 
 export interface DBPart {
   id?: number;
@@ -8,6 +8,7 @@ export interface DBPart {
   query?: Query;
   kakakuId?: string;
   selectedKakakuShopId?: number;
+  customPrice?: CustomPrice;
 }
 
 export class Database extends Dexie {

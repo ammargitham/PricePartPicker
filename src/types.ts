@@ -232,3 +232,9 @@ export class PartsFetchEvent extends MessageEvent {
     this.parts = parts;
   }
 }
+
+export interface CustomPrice {
+  name: string;
+  url?: string;
+  price: number;
+}

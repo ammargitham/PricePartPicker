@@ -106,7 +106,11 @@ export default function useKakakuSearch(part: Part): KakakuSearch {
       return;
     }
     // search using dbPart info
-    const { kakakuId, query, selectedKakakuShopId } = dbPart;
+    const { kakakuId, query, selectedKakakuShopId, customPrice } = dbPart;
+    if (customPrice) {
+      // No need to search
+      return;
+    }
     if (kakakuId) {
       // search using kakaku id
       getKakakuItemById(kakakuId, true, selectedKakakuShopId);
